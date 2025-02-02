@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "phone", ignore = true)
     User toEntity(SaveUserRequest saveUserRequest);
 
 
