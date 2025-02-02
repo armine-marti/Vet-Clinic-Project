@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="005_add_foreign_keys" author="armine">
+        <addForeignKeyConstraint baseTableName="pet" baseColumnNames="owner_id"
+                                 constraintName="fk_pet_user"
+                                 referencedTableName="user" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="appointment" baseColumnNames="pet_id"
+                                 constraintName="fk_appointment_pet"
+                                 referencedTableName="pet" referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="appointment" baseColumnNames="doctor_id"
+                                 constraintName="fk_appointment_doctor"
+                                 referencedTableName="doctor" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

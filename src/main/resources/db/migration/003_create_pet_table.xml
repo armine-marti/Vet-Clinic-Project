@@ -1,0 +1,28 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="003_create_pet_table" author="фкьшту">
+        <createTable tableName="pet">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="Pet_type" type="enum('CAT', 'DOG', 'FISH', 'RABBIT', 'BIRD', 'REPTILE', 'RODENT')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="enum('SMALL', 'MEDIUM', 'LARGE')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthday" type="datetime">
+            <constraints nullable="false"/>
+        </column>
+            <column name="weight" type="double"/>
+            <column name="gender" type="enum('MALE', 'FEMALE')"/>
+            <column name="owner_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

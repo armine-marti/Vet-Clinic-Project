@@ -1,0 +1,13 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include file="db/migration/001_create_database.xml" />
+    <include file="/db/migration/002_create_doctor_table.xml"/>
+
+    <include file="db/migration/004_create_appointment_table.xml"/>
+    <include file="db/migration/005_foreign_keys.xml"/>
+    <include file="db/migration/006_rename_pet_type_column.xml"/>
+    <include file="db/migration/007_rename_doctor_enums.xml"/>
+
+</databaseChangeLog>
