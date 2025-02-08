@@ -1,4 +1,5 @@
 package org.example.vetclinic.dto;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -6,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.vetclinic.entity.UserType;
+
 @Builder
 @Data
 @AllArgsConstructor

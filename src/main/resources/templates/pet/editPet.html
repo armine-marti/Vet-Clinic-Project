@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Pet</title>
+</head>
+<body>
+
+<form action="/pets/editPet" method="post" th:object="${savePetRequest}">
+
+    <div>
+        <input type="hidden" name="oldName" th:value="${savePetRequest.name}"/>
+        Name: <input type="text" th:field="*{name}" required/>
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span>
+    </div>
+    <br>
+
+    <div>
+        Type:
+        <select th:field="*{petType}">
+            <option value="CAT">CAT</option>
+            <option value="DOG">DOG</option>
+            <option value="FISH">FISH</option>
+            <option value="RABBIT">RABBIT</option>
+            <option value="BIRD">BIRD</option>
+            <option value="REPTILE">REPTILE</option>
+            <option value="RODENT">RODENT</option>
+        </select>
+        <span th:if="${#fields.hasErrors('petType')}" th:errors="*{petType}" style="color: red;"></span>
+    </div>
+    <br>
+
+    <div>
+        Size:
+        <select th:field="*{size}">
+            <option value="SMALL">SMALL</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="LARGE">LARGE</option>
+        </select>
+        <span th:if="${#fields.hasErrors('size')}" th:errors="*{size}" style="color: red;"></span>
+    </div>
+    <br>
+
+    <div>
+        Birthday: <input type="date" th:field="*{birthday}" required/>
+        <span th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" style="color: red;"></span>
+    </div>
+    <br>
+
+    <div>
+        Weight: <input type="text" th:field="*{weight}" required/>
+        <span th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}" style="color: red;"></span>
+    </div>
+    <br>
+
+    <div>
+        Gender:
+        <select th:field="*{gender}">
+            <option value="FEMALE">FEMALE</option>
+            <option value="MALE">MALE</option>
+        </select>
+        <span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" style="color: red;"></span>
+    </div>
+    <br>
+
+    <input type="submit" value="Edit">
+</form>
+
+<p th:if="${error}" th:text="${error}" style="color: red;"></p>
+<p th:if="${success}" th:text="${success}" style="color: green;"></p>
+
+</body>
+</html>

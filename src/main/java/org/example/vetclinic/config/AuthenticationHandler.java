@@ -1,4 +1,4 @@
-package org.example.vetclinic.congif;
+package org.example.vetclinic.config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

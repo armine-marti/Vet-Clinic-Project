@@ -1,4 +1,4 @@
-package org.example.vetclinic.dto;
+package org.example.vetclinic.dto.doctor;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

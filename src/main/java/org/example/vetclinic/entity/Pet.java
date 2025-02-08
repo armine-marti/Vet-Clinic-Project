@@ -8,12 +8,15 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "pet")
+@Table(name = "pet", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "owner_id"})
+})
 
 public class Pet {
     @Id
@@ -24,6 +27,7 @@ public class Pet {
     private PetType petType;
     @Enumerated(EnumType.STRING)
     private Size size;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private double weight;
     @Enumerated(EnumType.STRING)
