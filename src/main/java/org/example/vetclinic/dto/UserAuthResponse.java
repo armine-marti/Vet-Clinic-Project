@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.vetclinic.entity.UserType;
+
 
 @Data
 @AllArgsConstructor
@@ -12,7 +14,9 @@ import lombok.NoArgsConstructor;
 public class UserAuthResponse {
 
     private String name;
-    private String surname;
-    private int userId;
+    private String email;
+    private String phone;
+    private UserType userType;
+    private String token;
 
 }

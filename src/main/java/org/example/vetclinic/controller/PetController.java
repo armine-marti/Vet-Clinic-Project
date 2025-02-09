@@ -44,19 +44,21 @@ public class PetController {
         int userId = user.getId();
         List<PetDto> pets = petService.petsByUserId(userId);
         modelMap.put("pets", pets);
+        modelMap.put("currentUser", currentUser);
 
         return "pet/pets";
     }
 
 
     @GetMapping("/addPet")
-    public String addPet(Model model, Principal principal) {
+    public String addPet(ModelMap modelMap, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }
         CurrentUser currentUser = (CurrentUser) ((Authentication) principal).getPrincipal();
         User user = currentUser.getUser();
-        model.addAttribute("savePetRequest", new SavePetRequest());
+        modelMap.put("savePetRequest", new SavePetRequest());
+        modelMap.put("currentUser", currentUser);
         return "pet/addPet";
     }
 
@@ -81,8 +83,8 @@ public class PetController {
         Pet pet = petMapper.toEntity(savePetRequest);
         pet.setUser(user);
         petService.save(pet);
-
         redirectAttributes.addFlashAttribute("success", "You have added a new pet!");
+
         return "redirect:/pets";
     }
 

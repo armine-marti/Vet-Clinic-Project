@@ -3,58 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main-details.css" rel="stylesheet">
 </head>
 <body>
 
-<span>Please Register</span>
-
-<form action="/register" method="post" th:object="${saveUserRequest}">
-    <div>
-        Name: <input type="text" th:field="*{name}" required/>
-        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contactUs">Contacts</a>
+                </li>
+            </ul>
+        </div>
     </div>
-    <br>
+</nav>
 
-    <div>
-        Surname: <input type="text" th:field="*{surname}" required/>
-        <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" style="color: red;"></span>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <span>Please Register</span>
+                </div>
+                <div class="card-body">
+                    <form action="/register" method="post" th:object="${saveUserRequest}">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="surname" class="form-label">Surname:</label>
+                            <input type="text" class="form-control" id="surname" th:field="*{surname}" required>
+                            <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone:</label>
+                            <input type="text" class="form-control" id="phone" th:field="*{phone}" required>
+                            <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="userType" class="form-label">User Type:</label>
+                            <select class="form-select" id="userType" th:field="*{userType}">
+                                <option value="USER">USER</option>
+                                <option value="ADMIN">ADMIN</option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('userType')}" th:errors="*{userType}" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+
+                    <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+                        <p th:text="${error}"></p>
+                    </div>
+
+                    <div th:if="${success}" class="alert alert-success mt-3" role="alert">
+                        <p th:text="${success}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <br>
+</div>
+<div class="footer-image mt-5">
+    <img src="/images/paws-pink-footer.png" alt="Footer Image">
+</div>
 
-    <div>
-        Phone: <input type="text" th:field="*{phone}" required/>
-        <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" style="color: red;"></span>
-    </div>
-    <br>
-
-    <div>
-        Email: <input type="email" th:field="*{email}" required/>
-        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span>
-    </div>
-    <br>
-
-    <div>
-        Password: <input type="password" th:field="*{password}" required/>
-        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></span>
-    </div>
-    <br>
-
-    <div>
-        User Type:
-        <select th:field="*{userType}">
-            <option value="USER">USER</option>
-            <option value="ADMIN">ADMIN</option>
-        </select>
-        <span th:if="${#fields.hasErrors('userType')}" th:errors="*{userType}" style="color: red;"></span>
-    </div>
-    <br>
-
-    <input type="submit" value="Register">
-</form>
-
-
-<p th:if="${error}" th:text="${error}" style="color: red;"></p>
-<p th:if="${success}" th:text="${success}" style="color: green;"></p>
-
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
