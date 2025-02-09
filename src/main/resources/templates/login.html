@@ -3,20 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <!-- Подключение темы Minty -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main-details.css" rel="stylesheet">
 
 </head>
 <body>
-<span>Please Login</span>
-<form action="/login" method="post" th:object="${userAuthRequest}">
-    <label for="email">Email:</label>
-    <input type="email" id="email" th:field="*{email}" required/> <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" th:field="*{password}" required/> <br>
-    <input type="submit" value="login">
-</form>
-<div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
-    Invalid username or password.
-</div>
 
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contactUs">Contacts</a>
+                </li>
+            </ul>
+            <form class="d-flex" th:if="${currentUser != null}">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" formaction="/logout">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <span>Please Login</span>
+                </div>
+                <div class="card-body">
+                    <form action="/login" method="post" th:object="${userAuthRequest}">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
+                        Invalid username or password.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Подключение Bootstrap JS -->
+<div class="footer-image">
+    <img src="/images/paws-pink-footer.png" alt="Footer Image">
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

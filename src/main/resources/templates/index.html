@@ -1,25 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/main-details.css" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Welcome</title>
 </head>
 <body>
 
-<div th:if="${currentUser != null}">
-    Hello <span th:text="${currentUser.name}"></span>
-    <a href="/logout">Logout</a>
-</div><br>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contactUs">Contacts</a>
+                </li>
+            </ul>
+            <form class="d-flex" th:if="${currentUser != null}">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" formaction="/logout">Log out</button>
+            </form>
 
-<div th:if="${currentUser == null}">
-    Welcome guest | <a href="/register">Register</a><br>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container mt-4">
+    <div th:if="${currentUser != null}" class="text-center mt-4">
+        <h3>Hello, <span th:text="${currentUser.name}"></span>!</h3>
+    </div>
+    <div class="container mt-4 text-center">
+        <img src="/images/main-page-logo.png" alt="Main Image"  class="img-fluid" style="max-width: 40%;">
+    </div>
+    <div th:if="${currentUser == null}" class="text-center mt-4">
+        <h3>Welcome, Guest!</h3>
+        <a href="/register" class="btn btn-primary">Register</a>
+        <a href="/login" class="btn btn-success">Login</a>
+    </div>
 </div>
-<a href="/login">I already have an account</a><br>
 
-<a href="/ourServices">OUR SERVICES</a><br>
-<a href="/aboutUs">ABOUT US</a> <br>
-<a href="/contactUs">CONTACTS</a>
-
+<script src="/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

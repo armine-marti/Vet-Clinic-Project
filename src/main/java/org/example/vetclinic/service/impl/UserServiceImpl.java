@@ -14,6 +14,7 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
+
     @Override
     public User save(User user) {
         return userRepository.save(user);
@@ -23,5 +24,10 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByEmail(String email) {
 
         return userRepository.findByEmail(email);
+    }
+
+
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 }

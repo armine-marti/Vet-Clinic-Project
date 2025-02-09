@@ -1,19 +1,21 @@
 package org.example.vetclinic.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
 @Builder
-@Table(name = "pet")
+@Table(name = "pet", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "owner_id"})
+})
 
 public class Pet {
     @Id
@@ -24,6 +26,7 @@ public class Pet {
     private PetType petType;
     @Enumerated(EnumType.STRING)
     private Size size;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private double weight;
     @Enumerated(EnumType.STRING)

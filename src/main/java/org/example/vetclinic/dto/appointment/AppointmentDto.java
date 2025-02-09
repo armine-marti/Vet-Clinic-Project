@@ -1,4 +1,4 @@
-package org.example.vetclinic.dto;
+package org.example.vetclinic.dto.appointment;
 
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
