@@ -67,7 +67,7 @@ public class PetServiceImpl implements PetService {
         if (pets == null || pets.isEmpty()) {
             log.info("No pets found for user with ID: " + userId);
         } else {
-            log.info("Found " + pets.size() + " pets for user with ID: " + userId);
+            log.info("Found {} pets for user with ID: {}", pets.size(), userId);
         }
         return pets.stream()
                 .map(petMapper::toDto)

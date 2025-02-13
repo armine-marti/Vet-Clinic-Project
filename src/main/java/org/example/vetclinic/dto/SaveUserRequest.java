@@ -2,10 +2,7 @@ package org.example.vetclinic.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.vetclinic.entity.UserType;
 
 @Builder
@@ -22,6 +19,7 @@ public class SaveUserRequest {
     private String phone;
     @Email(message = "Invalid email format")
     @NotEmpty(message = "Email can't be empty")
+    @NotNull(message = "Email can't be empty")
     private String email;
     @NotEmpty(message = "Password can't be empty")
     @Size(min = 8, message = "Password must be at least 8 characters long")

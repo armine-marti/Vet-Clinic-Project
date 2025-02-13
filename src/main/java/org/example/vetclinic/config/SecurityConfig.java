@@ -1,6 +1,7 @@
 package org.example.vetclinic.config;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import org.example.vetclinic.config.jwt.JwtAuthenticationFilter;
@@ -26,8 +27,6 @@ import java.util.List;
 
 import static org.example.vetclinic.config.SecurityConstants.LOGOUT_PAGE;
 import static org.example.vetclinic.config.SecurityConstants.PERMITTED_PAGES;
-
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -35,7 +34,7 @@ import static org.example.vetclinic.config.SecurityConstants.PERMITTED_PAGES;
 public class SecurityConfig {
 
     private static final List<String> ALL = List.of("*");
-
+    private final CustomAuthenticationSuccessHandler successHandler;
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationEntryPoint authenticationEntryPoint;
@@ -43,23 +42,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .logout(logout -> logout
-                        .logoutUrl(SecurityConstants.LOGOUT_PAGE)
+                        .logoutUrl("/auth/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
-                                    SecurityContextHolder.clearContext();
-                                    response.setStatus(HttpServletResponse.SC_OK);
-                                }
-                        )
+                            SecurityContextHolder.clearContext();
+                            HttpSession session = request.getSession(false);
+                            if (session != null) {
+                                session.invalidate();
+                            }
+                            response.setStatus(HttpServletResponse.SC_OK);
+                        })
+                )
+                .formLogin(login -> login
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
+                        .successHandler(successHandler)
+                        .permitAll()
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login", "/auth/register", "/login", "/register").permitAll()
                         .requestMatchers(SecurityConstants.PERMITTED_PAGES).permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
+
                         .anyRequest().authenticated()
+
                 )
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(authenticationEntryPoint))
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(sess -> sess
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(SecurityConfig::getCorsConfigurer);
@@ -76,9 +89,5 @@ public class SecurityConfig {
             return configuration;
         });
     }
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class)
-                .authenticationProvider(authenticationProvider).build();
-    }
 }
+

@@ -37,12 +37,12 @@ public class JwtTokenUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("usertype", ((CurrentUser) userDetails).getUserType().name());
+        extraClaims.put("usertype", ((CurrentUser) userDetails).getUserType());
 
         Instant expirationTime = Instant.now().plusMillis(jwtExpirationInMillis);
         return Jwts.builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(((CurrentUser) userDetails).getUser().getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(Date.from(expirationTime))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

@@ -15,16 +15,15 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
     private final String name;
 
     public CurrentUser(User user) {
-        super(user.getEmail(), user.getPassword(),
-                AuthorityUtils.createAuthorityList(user.getUserType().name()));
 
-        log.info("Creating User for email: {}", user.getEmail());
-        log.debug("User details: name={}, userType={}", user.getName(), user.getUserType());
+        super(user.getEmail(), user.getPassword(),
+                AuthorityUtils.createAuthorityList("ROLE_" + user.getUserType().name()));
 
         this.user = user;
         this.userType = user.getUserType();
         this.name = user.getName();
-        log.info("User created successfully for email: {}", user.getEmail());
-    }
 
+        log.info("CurrentUser created for: {}", user.getEmail());
+        log.info("User roles: {}", AuthorityUtils.createAuthorityList("ROLE_" + user.getUserType().name()));
+    }
 }

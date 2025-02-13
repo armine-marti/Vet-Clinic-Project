@@ -41,7 +41,7 @@
                     <span>Please Register</span>
                 </div>
                 <div class="card-body">
-                    <form action="/register" method="post" th:object="${saveUserRequest}">
+                    <form action="/auth/register" method="post" th:object="${saveUserRequest}">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name:</label>
                             <input type="text" class="form-control" id="name" th:field="*{name}" required>
