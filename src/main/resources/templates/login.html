@@ -11,7 +11,8 @@
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Black Country Vets</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
@@ -30,12 +31,18 @@
                 </li>
             </ul>
 
-            <form class="d-flex" th:if="${#authorization.expression('isAuthenticated()')}" method="post" action="/logout">
+            <form class="d-flex" th:if="${#authorization.expression('isAuthenticated()')}" method="post"
+                  action="/logout">
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
             </form>
         </div>
     </div>
 </nav>
+
+
+<div th:if="${success}" class="alert alert-success d-flex justify-content-center align-items-center">
+    <p th:text="${success}"></p>
+</div>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -48,7 +55,8 @@
                     <form action="/auth/login" method="post" th:object="${userAuthRequest}">
                         <div class="mb-3">
                             <label for="email" class="form-label">Username (Email):</label>
-                            <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
+                            <input type="email" class="form-control" id="email" name="email" th:field="*{email}"
+                                   required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password:</label>

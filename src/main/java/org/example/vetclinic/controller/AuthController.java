@@ -42,6 +42,32 @@ public class AuthController {
         return "index";
     }
 
+    @GetMapping("/register")
+    public String showRegisterForm(Model model) {
+        model.addAttribute("saveUserRequest", new SaveUserRequest());
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute SaveUserRequest saveUserRequest,
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes) {
+        if (userService.existsByEmail(saveUserRequest.getEmail())) {
+            redirectAttributes.addFlashAttribute("error", "Please use another email!");
+            return "redirect:/auth/register";
+        }
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Please input correct data");
+            return "register";
+        }
+        String encodedPassword = passwordEncoder.encode(saveUserRequest.getPassword());
+        saveUserRequest.setPassword(encodedPassword);
+        User user = userMapper.toEntity(saveUserRequest);
+        userService.save(user);
+        redirectAttributes.addFlashAttribute("success", "Registration successful!");
+        return "redirect:/auth/login";
+    }
+
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("userAuthRequest", new UserAuthRequest());
@@ -49,16 +75,11 @@ public class AuthController {
     }
     @PostMapping("/login")
     public String login(@ModelAttribute UserAuthRequest userAuthRequest, HttpSession session) {
-        System.out.println("===== LOGIN REQUEST RECEIVED =====");
-        System.out.println("Email: " + userAuthRequest.getEmail());
-        System.out.println("Password: " + userAuthRequest.getPassword());
-        System.out.println("===============================");
 
         if (userAuthRequest.getEmail() == null || userAuthRequest.getEmail().isEmpty()) {
             System.out.println("empty email");
             return "redirect:/login?error";
         }
-
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(userAuthRequest.getEmail(), userAuthRequest.getPassword());
@@ -81,51 +102,16 @@ public class AuthController {
         if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             return "redirect:/adminMenu";
         } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
-            return "redirect:/userMenu";
+            return "redirect:/users/menu";
         } else {
             return "redirect:/auth/login";
         }
     }
 
-    @GetMapping("/register")
-    public String showRegisterForm(Model model) {
-        model.addAttribute("saveUserRequest", new SaveUserRequest());
-        return "register";
-    }
-
-
-    @PostMapping("/register")
-    public String register(@Valid @ModelAttribute SaveUserRequest saveUserRequest,
-                           BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes) {
-
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Please input correct data");
-            return "register";
-        }
-        String encodedPassword = passwordEncoder.encode(saveUserRequest.getPassword());
-        saveUserRequest.setPassword(encodedPassword);
-        User user = userMapper.toEntity(saveUserRequest);
-        userService.save(user);
-        redirectAttributes.addFlashAttribute("success", "Registration successful!");
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        SecurityContextHolder.clearContext();
         return "redirect:/auth/login";
     }
-
-//
-@GetMapping("/userMenu")
-public String userMenu(HttpSession session,@ModelAttribute  Model model) {
-    String token = (String) session.getAttribute("token");
-    if (token != null && !token.isEmpty()) {
-        model.addAttribute("token", token);
-    }
-
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.isAuthenticated() &&
-            authentication.getPrincipal() instanceof CurrentUser) {
-
-        CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
-        model.addAttribute("currentUser", currentUser.getUser());
-    }
-    return "userMenu";
-}
 }

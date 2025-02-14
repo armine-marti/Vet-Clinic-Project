@@ -23,8 +23,5 @@ public class PetDto {
     private Date birthday;
     private double weight;
     private Gender gender;
-    //    @ManyToOne
-//    @JoinColumn(name = "owner_id", nullable = false)
-//    private User user;
     private int userId;
 }

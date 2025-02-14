@@ -13,7 +13,6 @@ import org.example.vetclinic.entity.UserType;
 @Builder
 public class UserAuthResponse {
 
-
     private String email;
     private UserType userType;
     private String token;

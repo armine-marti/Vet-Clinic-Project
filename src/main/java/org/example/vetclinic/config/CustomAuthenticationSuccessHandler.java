@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+
 @Slf4j
 @Component
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -25,9 +26,9 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         authentication.getAuthorities().forEach(auth -> log.info("User has role: {}", auth.getAuthority()));
 
         if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            return "auth/adminMenu";
+            return "/admins/menu";
         } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
-            return "auth/userMenu";
+            return "/users/menu";
         }
         return "auth/login";
     }

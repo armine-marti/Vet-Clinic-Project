@@ -27,13 +27,13 @@ import java.util.List;
 
 import static org.example.vetclinic.config.SecurityConstants.LOGOUT_PAGE;
 import static org.example.vetclinic.config.SecurityConstants.PERMITTED_PAGES;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private static final List<String> ALL = List.of("*");
     private final CustomAuthenticationSuccessHandler successHandler;
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
@@ -51,6 +51,7 @@ public class SecurityConfig {
                             if (session != null) {
                                 session.invalidate();
                             }
+                            response.sendRedirect("/auth/login");
                             response.setStatus(HttpServletResponse.SC_OK);
                         })
                 )
@@ -58,13 +59,13 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
                         .successHandler(successHandler)
+                        .usernameParameter("email")
+                        .passwordParameter("password")
                         .permitAll()
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "/login", "/register").permitAll()
                         .requestMatchers(SecurityConstants.PERMITTED_PAGES).permitAll()
-                        .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/users/**").hasRole("USER")
 
                         .anyRequest().authenticated()
 
@@ -74,20 +75,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(SecurityConfig::getCorsConfigurer);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
-
-    private static void getCorsConfigurer(CorsConfigurer<HttpSecurity> cors) {
-        cors.configurationSource(request -> {
-            var configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(ALL);
-            configuration.setAllowedMethods(ALL);
-            configuration.setAllowedHeaders(ALL);
-            return configuration;
-        });
-    }
 }
-
