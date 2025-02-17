@@ -1,4 +1,4 @@
-package org.example.vetclinic.dto;
+package org.example.vetclinic.dto.appointment;
 
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class AppointmentDto {
-    private int id;
+
     private String title;
     private Date startTime;
     private Date finishTime;

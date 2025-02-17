@@ -4,7 +4,7 @@
 
 
 
-<changeSet id="006_rename_pet_type_column" author="yourname">
-    <renameColumn tableName="pet" oldColumnName="type" newColumnName="pet_type" columnDataType="enum('CAT', 'DOG', 'FISH', 'RABBIT', 'BIRD', 'REPTILE', 'RODENT')"/>
-</changeSet>
+    <changeSet id="006_rename_pet_type_column" author="armine">
+        <renameColumn tableName="pet" oldColumnName="Pet_type" newColumnName="pet_type" columnDataType="enum('CAT', 'DOG', 'FISH', 'RABBIT', 'BIRD', 'REPTILE', 'RODENT')"/>
+    </changeSet>
 </databaseChangeLog>

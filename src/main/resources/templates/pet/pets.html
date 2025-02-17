@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/main-details.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>My Pets</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/users/menu">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contactUs">Contacts</a>
+                </li>
+            </ul>
+            <form class="d-flex" th:if="${currentUser != null}">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" formaction="/logout">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<h1>Your Pets</h1>
+<a href="/pets/addPet" class="btn btn-primary">Add New Pet</a><br><br>
+
+<div th:if="${#lists.isEmpty(pets)}">
+    <p>You don't have any pets yet.</p>
+</div>
+
+<div th:unless="${#lists.isEmpty(pets)}">
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Pet Name</th>
+            <th>Pet Type</th>
+            <th>Size</th>
+            <th>Birthday</th>
+            <th>Weight (kg)</th>
+            <th>Gender</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pet : ${pets}">
+            <td th:text="${pet.name}">Pet Name</td>
+            <td th:text="${pet.petType}">Pet Type</td>
+            <td th:text="${pet.size}">Size</td>
+            <td th:text="${#dates.format(pet.birthday, 'yyyy-MM-dd')}">Birthday</td>
+            <td th:text="${pet.weight}">Weight</td>
+            <td th:text="${pet.gender}">Gender</td>
+            <td>
+                <a th:href="@{/pets/editPet(name=${pet.name})}" class="btn btn-warning btn-sm">Edit</a>
+
+                <form th:action="@{/pets/deletePet}" method="post" style="display: inline;">
+                    <input type="hidden" name="name" th:value="${pet.name}">
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this pet?')">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="footer-image">
+    <img src="/images/paws-pink-footer.png" alt="Footer Image">
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

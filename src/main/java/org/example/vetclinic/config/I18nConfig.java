@@ -1,4 +1,4 @@
-package org.example.vetclinic.congif;
+package org.example.vetclinic.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
