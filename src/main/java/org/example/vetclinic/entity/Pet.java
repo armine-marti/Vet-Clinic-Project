@@ -34,5 +34,7 @@ public class Pet {
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User user;
+    @Enumerated(EnumType.STRING)
+    private StatusPet statusPet;
 
 }

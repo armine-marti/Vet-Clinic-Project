@@ -1,16 +1,14 @@
 package org.example.vetclinic.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.vetclinic.dto.pet.PetDto;
+import org.example.vetclinic.dto.pet.PetDtoBooking;
 import org.example.vetclinic.entity.Pet;
-import org.example.vetclinic.entity.User;
 import org.example.vetclinic.mapper.PetMapper;
 import org.example.vetclinic.repository.PetRepository;
-import org.example.vetclinic.security.CurrentUser;
 import org.example.vetclinic.service.PetService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,16 +24,6 @@ public class PetServiceImpl implements PetService {
     private final PetMapper petMapper;
 
     @Override
-    public boolean existsByName(String name) {
-        return petRepository.existsByName(name);
-    }
-
-    @Override
-    public boolean existsByNameAndUserId(String name, int userId) {
-        return petRepository.existsByNameAndUserId(name, userId);
-    }
-
-    @Override
     public Pet save(Pet pet) {
 
         if (pet.getId() != 0) {
@@ -43,22 +31,6 @@ public class PetServiceImpl implements PetService {
         } else {
             return petRepository.save(pet);
         }
-    }
-
-    @Override
-    public List<Pet> getPetByUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("User is not authenticated");
-        }
-        CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
-        User user = currentUser.getUser();
-        return petRepository.findPetByUserId(user.getId());
-    }
-
-    @Override
-    public Optional<Pet> findById(int petId) {
-        return petRepository.findById(petId);
     }
 
     @Override
@@ -80,17 +52,31 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Optional<Pet> findByNameAndUserId(String name, int id) {
-        return petRepository.findByNameAndUserId(name, id);
+    public Pet getById(int petId) {
+        return petRepository.findById(petId)
+                .orElseThrow();
     }
 
     @Override
-    public List<PetDto> findAll() {
-        return petMapper.toDtoList(petRepository.findAll());
+    public List<PetDtoBooking> petsDtoBookingByUserId(int userId) {
+        List<Pet> pets = petRepository.findByUserId(userId);
+        List<PetDtoBooking> petsDtoBookings = petMapper.toPetDtoBooking(pets);
+        return petsDtoBookings;
     }
 
     @Override
-    public void delete(Pet pet) {
-        petRepository.delete(pet);
+    public boolean existsByNameAndUserId(String Name, int userId) {
+        Pet pet = petRepository.findByNameAndUserId(Name, userId).orElse(null);
+        if (pet != null) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public void getPetDeleted(String name, int userId) {
+        Pet pet = petRepository.findByNameAndUserId(name, userId).orElse(null);
+        petRepository.softPetDelete(pet.getId());
     }
 }

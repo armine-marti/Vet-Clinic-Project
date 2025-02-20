@@ -11,7 +11,8 @@
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Black Country Vets</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
@@ -23,10 +24,10 @@
                     <a class="nav-link" href="/ourServices">Our Services</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/aboutUs">About Us</a>
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contactUs">Contacts</a>
+                    <a class="nav-link" href="/navbar/contactUs">Contacts</a>
                 </li>
             </ul>
         </div>
@@ -51,7 +52,8 @@
                         <div class="mb-3">
                             <label for="surname" class="form-label">Surname:</label>
                             <input type="text" class="form-control" id="surname" th:field="*{surname}" required>
-                            <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="text-danger"></span>
+                            <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"
+                                  class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
@@ -69,7 +71,8 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">Password:</label>
                             <input type="password" class="form-control" id="password" th:field="*{password}" required>
-                            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
+                            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                                  class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
@@ -78,7 +81,8 @@
                                 <option value="USER">USER</option>
                                 <option value="ADMIN">ADMIN</option>
                             </select>
-                            <span th:if="${#fields.hasErrors('userType')}" th:errors="*{userType}" class="text-danger"></span>
+                            <span th:if="${#fields.hasErrors('userType')}" th:errors="*{userType}"
+                                  class="text-danger"></span>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Register</button>

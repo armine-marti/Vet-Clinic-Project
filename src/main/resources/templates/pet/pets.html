@@ -23,14 +23,14 @@
                     <a class="nav-link" href="/ourServices">Our Services</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/aboutUs">About Us</a>
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contactUs">Contacts</a>
+                    <a class="nav-link" href="/navbar/contactUs">Contacts</a>
                 </li>
             </ul>
-            <form class="d-flex" th:if="${currentUser != null}">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit" formaction="/logout">Log out</button>
+            <form action="/auth/logout" method="post" class="d-flex">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
             </form>
         </div>
     </div>

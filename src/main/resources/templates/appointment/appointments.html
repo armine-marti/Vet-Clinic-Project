@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Your Appointments</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/appointments">Appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/contactUs">Contact</a>
+                </li>
+            </ul>
+            <form action="/auth/logout" method="post" class="d-flex">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<h2 class="text-center mt-4">Your Appointments</h2>
+<a href="/appointments/addAppointment" class="btn btn-secondary">Add New Appointment</a>
+
+<div th:if="${appointments}">
+    <table class="table table-bordered table-hover mt-4">
+        <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Appointment Time</th>
+            <th>Pet</th>
+            <th>Doctor</th>
+            <th>Actions</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appointment : ${appointments}">
+            <td th:text="${appointment.title}">Title</td>
+            <td th:text="${#dates.format(appointment.startTime, 'yyyy-MM-dd HH:mm')}">Start Time</td>
+            <td th:text="${appointment.petName}">Pet ID</td>
+            <td th:text="${appointment.doctorSurname}">Doctor ID</td>
+            <td>
+
+                <form th:action="@{/appointments/cancelAppointment}" method="post" style="display: inline;">
+                    <input type="hidden" name="title" th:value="${appointment.title}">
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this appointment?')">
+                        Cancel
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-danger text-center">TO RESCHEDULE AN APPOINTMENT PLEASE CALL US ON THIS NUMBER 0121 377 4416</p>
+
+
+<div th:if="${#lists.isEmpty(appointments)}" class="text-center mt-4">
+    <p>You have no appointments scheduled.</p>
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -24,10 +24,10 @@
                     <a class="nav-link" href="/ourServices">Our Services</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/aboutUs">About Us</a>
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contactUs">Contacts</a>
+                    <a class="nav-link" href="/navbar/contactUs">Contacts</a>
                 </li>
             </ul>
             <form class="d-flex" th:if="${currentUser != null}">
@@ -52,6 +52,14 @@
         <a href="/auth/login" class="btn btn-success">Login</a>
     </div>
 </div>
+
+<div class="alert alert-dismissible alert-secondary fixed-bottom-end">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <strong>MEET OUR DOCTORS BEFORE BOOKING APPOINTMENT FOR YOUR PET</strong> here they are!<a href="/navbar/ourDoctors"
+                                                                                               class="alert-link">OUR
+    DOCTORS!</a>
+</div>
+
 
 <script src="/js/bootstrap.bundle.min.js"></script>
 

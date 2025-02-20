@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.vetclinic.config.jwt.JwtTokenUtil;
-
 import org.example.vetclinic.dto.SaveUserRequest;
 import org.example.vetclinic.dto.UserAuthRequest;
 import org.example.vetclinic.entity.User;
@@ -22,7 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -73,6 +75,7 @@ public class AuthController {
         model.addAttribute("userAuthRequest", new UserAuthRequest());
         return "login";
     }
+
     @PostMapping("/login")
     public String login(@ModelAttribute UserAuthRequest userAuthRequest, HttpSession session) {
 
@@ -99,9 +102,11 @@ public class AuthController {
     }
 
     private String redirectBasedOnRole(Authentication authentication) {
-        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+        if (authentication.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN"))) {
             return "redirect:/adminMenu";
-        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+        } else if (authentication.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_USER"))) {
             return "redirect:/users/menu";
         } else {
             return "redirect:/auth/login";

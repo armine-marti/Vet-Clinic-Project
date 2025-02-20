@@ -7,3 +7,18 @@
     width: 100%;
     display: block;
 }
+
+.about-us {
+    text-align: center;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.fixed-bottom-end {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+    width: auto;
+    max-width: 300px;
+}

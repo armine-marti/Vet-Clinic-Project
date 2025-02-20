@@ -18,8 +18,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PetDto {
+public class PetDtoBooking {
 
+    private int id;
     private String name;
     private PetType petType;
     private Size size;
@@ -27,7 +28,7 @@ public class PetDto {
     private Date birthday;
     private double weight;
     private Gender gender;
-    private int userId;
     @Enumerated(EnumType.STRING)
     private StatusPet statusPet;
+
 }

@@ -1,6 +1,5 @@
 package org.example.vetclinic.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.vetclinic.entity.User;
@@ -37,9 +36,12 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findByEmail(email);
     }
-
-
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public User findById(int id) {
+        return userRepository.findById(id).orElse(null);
     }
 }
