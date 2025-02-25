@@ -9,5 +9,5 @@ public interface DoctorService {
 
     Doctor getById(int id);
 
-    List<DoctorDto> findAll();
+    List<DoctorDto> getAll();
 }

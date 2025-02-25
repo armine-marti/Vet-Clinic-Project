@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.vetclinic.dto.UserDto;
 import org.example.vetclinic.dto.doctor.DoctorDto;
 import org.example.vetclinic.dto.pet.PetDtoBooking;
+import org.example.vetclinic.dto.user.UserDto;
 import org.example.vetclinic.entity.Status;
 
 import java.util.Date;

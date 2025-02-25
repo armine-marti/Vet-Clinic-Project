@@ -10,6 +10,7 @@ import org.example.vetclinic.dto.pet.PetDtoBooking;
 import org.example.vetclinic.entity.Status;
 import org.example.vetclinic.entity.StatusPet;
 import org.example.vetclinic.entity.User;
+import org.example.vetclinic.mapper.AppointmentMapper;
 import org.example.vetclinic.security.CurrentUser;
 import org.example.vetclinic.service.AppointmentService;
 import org.example.vetclinic.service.DoctorService;
@@ -22,10 +23,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/appointments")
@@ -37,16 +36,16 @@ public class AppointmentController {
     private final StartTimeCheck startTimeCheck;
     private final PetService petService;
     private final DoctorService doctorService;
+    private final AppointmentMapper appointmentMapper;
 
     @GetMapping
     public String userAppointments(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
-
         User user = currentUser.getUser();
 
-        List<AppointmentDto> appointments = appointmentService.appointmentsByUserId(user.getId());
-        appointments = appointments.stream()
-                .filter(appointment -> !Status.CANCELED.equals(appointment.getStatus()))
-                .collect(Collectors.toList());
+        List<AppointmentDto> appointments = appointmentMapper.toDtoList(
+                appointmentService.getAllByStatusAndUserIdAndStartTimeIsFuture(Status.BOOKED, user.getId())
+        );
+
         modelMap.put("appointments", appointments);
         modelMap.put("currentUser", currentUser);
 
@@ -54,22 +53,15 @@ public class AppointmentController {
     }
 
     @GetMapping("/addAppointment")
-    public String addAppointment(ModelMap modelMap, Principal principal, @AuthenticationPrincipal CurrentUser currentUser) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
-
-        User user = currentUser.getUser();
-
-        List<PetDtoBooking> pets = petService.petsDtoBookingByUserId(user.getId());
-        pets = pets.stream()
-                .filter(pet -> !StatusPet.DELETED.equals(pet.getStatusPet()))
-                .collect(Collectors.toList());
-        List<DoctorDto> doctors = doctorService.findAll();
+    public String addAppointment(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
+        List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT,
+                currentUser.getUser().getId());
+        List<DoctorDto> doctors = doctorService.getAll();
         modelMap.put("saveAppointmentRequest", new SaveAppointmentRequest());
         modelMap.put("currentUser", currentUser);
         modelMap.put("pets", pets);
         modelMap.put("doctors", doctors);
+
         return "appointment/addAppointment";
     }
 
@@ -80,12 +72,11 @@ public class AppointmentController {
             RedirectAttributes redirectAttributes, ModelMap modelMap,
             @AuthenticationPrincipal CurrentUser currentUser
     ) {
+        User user = currentUser.getUser();
+
         if (bindingResult.hasErrors()) {
-            List<PetDtoBooking> pets = petService.petsDtoBookingByUserId(currentUser.getUser().getId());
-            pets = pets.stream()
-                    .filter(pet -> !StatusPet.DELETED.equals(pet.getStatusPet()))
-                    .collect(Collectors.toList());
-            List<DoctorDto> doctors = doctorService.findAll();
+            List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT, user.getId());
+            List<DoctorDto> doctors = doctorService.getAll();
             modelMap.put("pets", pets);
             modelMap.put("doctors", doctors);
             modelMap.put("currentUser", currentUser);
@@ -93,14 +84,13 @@ public class AppointmentController {
             return "appointment/addAppointment";
         }
 
-        User user = currentUser.getUser();
-        boolean isAppointmentTitleUnique = appointmentService.getAppointmentByTitleAndUserId(saveAppointmentRequest.
-                getTitle(), currentUser.getUser().getId());
+        boolean isAppointmentTitleUnique = appointmentService.existsByTitleAndUserId(saveAppointmentRequest.
+                getTitle(), user.getId());
         if (isAppointmentTitleUnique) {
             bindingResult.rejectValue("title", "error.saveAppointmentRequest",
                     "Please choose different title for appointment!");
-            List<PetDtoBooking> pets = petService.petsDtoBookingByUserId(currentUser.getUser().getId());
-            List<DoctorDto> doctors = doctorService.findAll();
+            List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT, user.getId());
+            List<DoctorDto> doctors = doctorService.getAll();
             modelMap.put("pets", pets);
             modelMap.put("doctors", doctors);
             return "appointment/addAppointment";
@@ -109,18 +99,17 @@ public class AppointmentController {
         Date startTime = saveAppointmentRequest.getStartTime();
         int doctorId = saveAppointmentRequest.getDoctorId();
 
-        if (!startTimeCheck.appointmentsTimeValidation(startTime, doctorId)) {
+        if (!startTimeCheck.validateAppointmentsTime(startTime, doctorId)) {
             redirectAttributes.addFlashAttribute("error",
                     "Sorry, the doctor is not available at this time! Please choose another time or doctor");
             return "redirect:addAppointment";
         }
-        if (appointmentService.existsByTimeAndUserId(startTime, currentUser.getUser().getId())) {
+        if (appointmentService.existsByStartTimeAndUserId(startTime, user.getId())) {
             redirectAttributes.addFlashAttribute("error",
                     "You already have an appointment booked for this time! Please choose another time and date");
             return "redirect:addAppointment";
         }
 
-        user = currentUser.getUser();
         saveAppointmentRequest.setFinishTime();
         saveAppointmentRequest.setUserId(user.getId());
         appointmentService.save(saveAppointmentRequest);
@@ -130,11 +119,13 @@ public class AppointmentController {
     }
 
     @PostMapping("/cancelAppointment")
-    public String cancelAppointment(@RequestParam("title") String title,
-                                    RedirectAttributes redirectAttributes,
-                                    @AuthenticationPrincipal CurrentUser currentUser) {
-
-        appointmentService.getAppointmentCancelled(title, currentUser.getUser().getId());
+    public String cancelAppointment(
+            @RequestParam("title") String title,
+            RedirectAttributes redirectAttributes,
+            @AuthenticationPrincipal CurrentUser currentUser
+    ) {
+        User user = currentUser.getUser();
+        appointmentService.cancelAppointment(title, user.getId());
         redirectAttributes.addFlashAttribute("success", "Appointment has been deleted!");
         return "redirect:/appointments";
 

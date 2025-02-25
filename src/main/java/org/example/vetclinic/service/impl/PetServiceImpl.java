@@ -6,14 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.vetclinic.dto.pet.PetDto;
 import org.example.vetclinic.dto.pet.PetDtoBooking;
 import org.example.vetclinic.entity.Pet;
+import org.example.vetclinic.entity.StatusPet;
 import org.example.vetclinic.mapper.PetMapper;
 import org.example.vetclinic.repository.PetRepository;
 import org.example.vetclinic.service.PetService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,30 +25,24 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Pet save(Pet pet) {
-
-        if (pet.getId() != 0) {
-            return petRepository.save(pet);
-        } else {
-            return petRepository.save(pet);
-        }
+        pet.setStatusPet(StatusPet.PRESENT);
+        return petRepository.save(pet);
     }
 
     @Override
     public List<PetDto> petsByUserId(int userId) {
         List<Pet> pets = petRepository.findByUserId(userId);
+
         if (pets == null || pets.isEmpty()) {
-            log.info("No pets found for user with ID: " + userId);
-        } else {
-            log.info("Found {} pets for user with ID: {}", pets.size(), userId);
+            return Collections.emptyList();
         }
-        return pets.stream()
-                .map(petMapper::toDto)
-                .collect(Collectors.toList());
+
+        return petMapper.toDtoList(pets);
     }
 
     @Override
-    public Optional<Pet> findByName(String name) {
-        return petRepository.findByName(name);
+    public Pet getByNameOrNull(String name) {
+        return petRepository.findByName(name).orElse(null);
     }
 
     @Override
@@ -60,23 +54,40 @@ public class PetServiceImpl implements PetService {
     @Override
     public List<PetDtoBooking> petsDtoBookingByUserId(int userId) {
         List<Pet> pets = petRepository.findByUserId(userId);
-        List<PetDtoBooking> petsDtoBookings = petMapper.toPetDtoBooking(pets);
-        return petsDtoBookings;
-    }
-
-    @Override
-    public boolean existsByNameAndUserId(String Name, int userId) {
-        Pet pet = petRepository.findByNameAndUserId(Name, userId).orElse(null);
-        if (pet != null) {
-            return true;
-        }
-        return false;
+        return petMapper.toPetDtoBooking(pets);
     }
 
     @Override
     @Transactional
-    public void getPetDeleted(String name, int userId) {
-        Pet pet = petRepository.findByNameAndUserId(name, userId).orElse(null);
+    public void deletePet(String name, int userId) {
+        Pet pet = getByNameAndUserId(name, userId);
         petRepository.softPetDelete(pet.getId());
+    }
+
+    @Override
+    public Pet getByNameAndUserId(String name, int userId) {
+        return petRepository.findByNameAndUserId(name, userId).orElseThrow();
+    }
+
+    @Override
+    public Pet getByNameAndUserIdOrNull(String name, int userId) {
+        return petRepository.findByNameAndUserId(name, userId).orElse(null);
+    }
+
+    @Override
+    public List<PetDtoBooking> getAllByStatusPetAndUserIdForBooking(StatusPet statusPet, int userId) {
+        List<Pet> pets = petRepository.findAllByStatusPetAndUserId(statusPet, userId);
+        return petMapper.toPetDtoBooking(pets);
+    }
+
+    @Override
+    public List<PetDto> getAllByStatusPetAndUserId(StatusPet statusPet, int userId) {
+        List<Pet> pets = petRepository.findAllByStatusPetAndUserId(statusPet, userId);
+        return petMapper.toPetDtoList(pets);
+    }
+
+    @Override
+    public boolean existsByNameAndUserId(String name, int userId) {
+        return petRepository.existsByNameAndUserId(name, userId);
     }
 }

@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.example.vetclinic.entity.UserType;
 import org.example.vetclinic.security.CurrentUser;
+import org.example.vetclinic.util.DateUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -52,7 +53,7 @@ public class JwtTokenUtil {
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return extractExpiration(token).before(DateUtil.getCurrentDate());
     }
 
     private Date extractExpiration(String token) {

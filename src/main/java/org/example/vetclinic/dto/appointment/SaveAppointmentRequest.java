@@ -24,7 +24,7 @@ public class SaveAppointmentRequest {
     @Size(max = 100, message = "Title must be at most 100 characters")
     private String title;
     @NotNull(message = "Appointment time  is required")
-    @FutureOrPresent(message ="Please choose an appropriate time for your appointment. Check our schedule if needed.")
+    @FutureOrPresent(message = "Please choose an appropriate time for your appointment. Check our schedule if needed.")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date startTime;
     private Date finishTime;

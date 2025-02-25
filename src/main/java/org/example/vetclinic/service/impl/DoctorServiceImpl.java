@@ -26,7 +26,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorDto> findAll() {
+    public List<DoctorDto> getAll() {
         List<Doctor> doctors = doctorRepository.findAll();
         return doctorMapper.doctorDtoList(doctors);
     }

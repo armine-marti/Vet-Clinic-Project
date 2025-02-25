@@ -1,6 +1,7 @@
 package org.example.vetclinic.repository;
 
 import org.example.vetclinic.entity.Pet;
+import org.example.vetclinic.entity.StatusPet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,8 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     @Modifying
     @Query("UPDATE Pet p SET p.statusPet = 'DELETED' WHERE p.id = :petId")
     void softPetDelete(@Param("petId") int petId);
+
+    boolean existsByNameAndUserId(String Name, int userId);
+
+    List<Pet> findAllByStatusPetAndUserId(StatusPet statusPet, int userId);
 }

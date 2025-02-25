@@ -27,8 +27,7 @@ public class UserController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() &&
-                authentication.getPrincipal() instanceof CurrentUser) {
-            CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
+                authentication.getPrincipal() instanceof CurrentUser currentUser) {
             model.addAttribute("currentUser", currentUser.getUser());
         }
         return "/users/menu";

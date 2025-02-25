@@ -1,4 +1,4 @@
-package org.example.vetclinic.dto;
+package org.example.vetclinic.dto.user;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

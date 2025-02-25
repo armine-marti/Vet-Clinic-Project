@@ -1,6 +1,5 @@
 package org.example.vetclinic.service.impl;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +10,7 @@ import org.example.vetclinic.entity.Status;
 import org.example.vetclinic.mapper.AppointmentMapper;
 import org.example.vetclinic.repository.AppointmentRepository;
 import org.example.vetclinic.service.AppointmentService;
+import org.example.vetclinic.util.DateUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,23 +24,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
 
-    @PostConstruct
-    public void init() {
-        log.info("AppointmentServiceImpl injected: {}", this);
-    }
-
     @Override
     public List<AppointmentDto> appointmentsByUserId(int userId) {
+        List<Appointment> appointments = appointmentRepository.findAllByUserId(userId);
 
-        List<Appointment> appointments = appointmentRepository.findAllByUser_Id(userId);
-        List<AppointmentDto> appointmentsDtos = appointmentMapper.toDtoList(appointments);
-        return appointmentsDtos;
-    }
-
-    @Override
-    public boolean existsByTimeAndUserId(Date startTime, int userId) {
-        Appointment appointment = appointmentRepository.findByUserIdAndStartTime(userId, startTime).orElse(null);
-        return appointment != null;
+        return appointmentMapper.toDtoList(appointments);
     }
 
     @Override
@@ -53,18 +41,28 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public void getAppointmentCancelled(String title, int userId) {
-        Appointment appointment = appointmentRepository.findByTitleAndUserId(title, userId).orElse(null);
-        appointmentRepository.softAppointmentCancel(appointment.getId());
+    public void cancelAppointment(String title, int userId) {
+        Appointment appointment = getByTitleAndUserId(title, userId);
+        appointmentRepository.cancelAppointment(appointment.getId());
     }
 
     @Override
-    public boolean getAppointmentByTitleAndUserId(String title, int userId) {
-        Appointment appointment = appointmentRepository.findByTitleAndUserId(title, userId).orElse(null);
-        if (appointment != null) {
-            return true;
-        }
-        return false;
+    public Appointment getByTitleAndUserId(String title, int userId) {
+        return appointmentRepository.findByTitleAndUserId(title, userId).orElseThrow();
     }
 
+    @Override
+    public List<Appointment> getAllByStatusAndUserIdAndStartTimeIsFuture(Status status, int userId) {
+        return appointmentRepository.findAllByStatusAndUserIdAndStartTimeIsAfter(status, userId, DateUtil.getCurrentDate());
+    }
+
+    @Override
+    public boolean existsByTitleAndUserId(String title, int userId) {
+        return appointmentRepository.existsAppointmentByTitleAndUserId(title, userId);
+    }
+
+    @Override
+    public boolean existsByStartTimeAndUserId(Date startTime, int userId) {
+        return appointmentRepository.existsByStartTimeAndUserId(startTime, userId);
+    }
 }

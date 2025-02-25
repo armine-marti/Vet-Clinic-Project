@@ -7,13 +7,10 @@ import org.example.vetclinic.repository.UserRepository;
 import org.example.vetclinic.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
 
     private final UserRepository userRepository;
 
@@ -32,16 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-
-        return userRepository.findByEmail(email);
-    }
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
-    }
-
-    @Override
-    public User findById(int id) {
-        return userRepository.findById(id).orElse(null);
     }
 }
