@@ -1,5 +1,7 @@
 package org.example.vetclinic.dto.pet;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +9,9 @@ import lombok.NoArgsConstructor;
 import org.example.vetclinic.entity.Gender;
 import org.example.vetclinic.entity.PetType;
 import org.example.vetclinic.entity.Size;
+import org.example.vetclinic.entity.StatusPet;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 @Data
@@ -24,4 +28,6 @@ public class PetDto {
     private double weight;
     private Gender gender;
     private int userId;
+    @Enumerated(EnumType.STRING)
+    private StatusPet statusPet;
 }

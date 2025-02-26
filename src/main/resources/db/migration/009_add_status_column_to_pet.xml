@@ -1,0 +1,13 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="009_add_status_column_to_pet" author="armine">
+        <addColumn tableName="pet">
+            <column name="status_pet" type="enum('PRESENT', 'DELETED')"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

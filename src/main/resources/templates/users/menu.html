@@ -21,13 +21,13 @@
                     <a class="nav-link active" href="/users/menu">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/ourServices">Our Services</a>
+                    <a class="nav-link" href="/navbar/ourServices">Our Services</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/aboutUs">About Us</a>
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contactUs">Contacts</a>
+                    <a class="nav-link" href="/navbar/contactUs">Contacts</a>
                 </li>
             </ul>
             <form action="/auth/logout" method="post" class="d-flex">
@@ -48,10 +48,18 @@
         <p>Hello, <span th:text="${currentUser.name}">User</span></p>
         <div class="d-flex gap-2">
             <a href="/pets" class="btn btn-primary">My Pets</a>
-            <a href="/myAppointments" class="btn btn-success">My Appointments</a>
+            <a href="/appointments" class="btn btn-success">My Appointments</a>
         </div>
     </div>
 
+</div>
+
+
+<div class="alert alert-dismissible alert-secondary fixed-bottom-end">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <strong>MEET OUR DOCTORS BEFORE BOOKING APPOINTMENT FOR YOUR PET</strong> here they are!<a href="/navbar/ourDoctors"
+                                                                                               class="alert-link">OUR
+    DOCTORS!</a>
 </div>
 
 <script src="/js/bootstrap.bundle.min.js"></script>

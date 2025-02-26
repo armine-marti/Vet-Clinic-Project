@@ -1,8 +1,10 @@
-package org.example.vetclinic.dto;
+package org.example.vetclinic.dto.user;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.vetclinic.entity.UserType;
 
 @Builder

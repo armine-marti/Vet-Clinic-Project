@@ -3,7 +3,6 @@ package org.example.vetclinic.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -23,11 +22,14 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private String determineTargetUrl(Authentication authentication) {
-        authentication.getAuthorities().forEach(auth -> log.info("User has role: {}", auth.getAuthority()));
+        authentication.getAuthorities().forEach(auth -> log.info("User has role: {}",
+                auth.getAuthority()));
 
-        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+        if (authentication.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_ADMIN"))) {
             return "/admins/menu";
-        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+        } else if (authentication.getAuthorities().stream().anyMatch(a ->
+                a.getAuthority().equals("ROLE_USER"))) {
             return "/users/menu";
         }
         return "auth/login";

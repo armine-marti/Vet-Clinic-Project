@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/main-details.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Add Appointment</title>
+</head>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/users/menu">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/contactUs">Contacts</a>
+                </li>
+            </ul>
+            <form action="/auth/logout" method="post" class="d-flex">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<body>
+
+
+<div th:if="${error != null}" class="alert alert-danger" role="alert">
+    <span th:text="${error}"></span>
+</div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Please add an appointment</h2>
+                    <p class="text-danger">YOU CAN BOOK AN APPOINTMENT EVERY 30 MINUTES, FROM 8:30 TO 19:00 (EXAMPLES: 08:30, 09:00, 09:30 etc)</p>
+                </div>
+                <div class="card-body">
+
+                    <form action="/appointments/addAppointment" method="post" th:object="${saveAppointmentRequest}">
+
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title:</label>
+                            <input type="text" id="title" class="form-control" th:field="*{title}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="startTime" class="form-label">Start Time:</label>
+                            <input type="datetime-local" id="startTime" class="form-control" th:field="*{startTime}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="petId" class="form-label">Select Pet:</label>
+                            <select id="petId" class="form-select" th:field="*{petId}">
+                                <option value="">-- Select Pet --</option>
+                                <option th:each="pet : ${pets}" th:value="${pet.id}" th:text="${pet.name}"></option>
+                            </select>
+                            <div class="text-danger" th:if="${#fields.hasErrors('petId')}" th:errors="*{petId}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="doctorId" class="form-label">Select Doctor:</label>
+                            <select id="doctorId" class="form-select" th:field="*{doctorId}">
+                                <option value="">-- Select Doctor --</option>
+                                <option th:each="doctor : ${doctors}" th:value="${doctor.id}"
+                                        th:text="${doctor.surname}"></option>
+                            </select>
+                            <div class="text-danger" th:if="${#fields.hasErrors('doctorId')}" th:errors="*{doctorId}"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Add Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-dismissible alert-secondary fixed-bottom-end">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <strong>MEET OUR DOCTORS BEFORE BOOKING APPOINTMENT FOR YOUR PET</strong> here they are! <a
+        href="/navbar/ourDoctors" class="alert-link">OUR DOCTORS!</a>
+</div>
+
+</body>
+</html>

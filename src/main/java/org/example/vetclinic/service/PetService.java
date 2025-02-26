@@ -1,29 +1,35 @@
 package org.example.vetclinic.service;
 
 import org.example.vetclinic.dto.pet.PetDto;
+import org.example.vetclinic.dto.pet.PetDtoBooking;
 import org.example.vetclinic.entity.Pet;
+import org.example.vetclinic.entity.StatusPet;
+import org.mapstruct.Named;
+
 import java.util.List;
-import java.util.Optional;
 
 public interface PetService {
 
-    boolean existsByName(String name);
-
-    boolean existsByNameAndUserId(String name, int userId);
-
     Pet save(Pet pet);
 
-    List<Pet> getPetByUser();
-
-    Optional<Pet> findById(int petId);
-
-    List<PetDto> findAll();
+    @Named("getPetById")
+    Pet getById(int petId);
 
     List<PetDto> petsByUserId(int userId);
 
-    Optional<Pet> findByNameAndUserId(String name, int id);
+    List<PetDtoBooking> petsDtoBookingByUserId(int userId);
 
-    Optional<Pet> findByName(String name);
+    Pet getByNameOrNull(String name);
 
-    void delete(Pet pet);
+    void deletePet(String name, int userId);
+
+    Pet getByNameAndUserId(String name, int userId);
+
+    Pet getByNameAndUserIdOrNull(String name, int userId);
+
+    List<PetDtoBooking> getAllByStatusPetAndUserIdForBooking(StatusPet statusPet, int userId);
+
+    List<PetDto> getAllByStatusPetAndUserId(StatusPet statusPet, int userId);
+
+    boolean existsByNameAndUserId(String name, int userId);
 }

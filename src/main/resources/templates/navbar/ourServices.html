@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/main-details.css" rel="stylesheet">
+    <title>Our Services</title>
+</head>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="${#authorization.expression('isAuthenticated()') ? '/users/menu' : '/'}">Home</a>
+
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/contactUs">Contacts</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+<body>
+<div class="table-container1">
+    <table>
+        <thead>
+        <tr>
+            <th scope="col"><strong>Service</strong></th>
+            <th scope="col"><strong>Price</strong></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Consultations -->
+        <tr class="section-header">
+            <th scope="row" colspan="2"><strong>Consultations</strong></th>
+        </tr>
+        <tr>
+            <td>Nurse Consultation</td>
+            <td>£24.50</td>
+        </tr>
+        <tr>
+            <td>Consultation</td>
+            <td>£48.25</td>
+        </tr>
+        <tr>
+            <td>Emergency Consultation</td>
+            <td>£175.00</td>
+        </tr>
+
+        <!-- Vaccinations -->
+        <tr class="section-header">
+            <th scope="row" colspan="2"><strong>Vaccinations</strong></th>
+        </tr>
+        <tr>
+            <td>Baby Pet Vaccinations (Each Shot)</td>
+            <td>£45.50</td>
+        </tr>
+        <tr>
+            <td>Adult Pet Vaccinations (Each Shot)</td>
+            <td>£60.00</td>
+        </tr>
+        <tr>
+            <td>Rabbit Myxo + RHD</td>
+            <td>£66.00</td>
+        </tr>
+        <tr>
+            <td>Rabies</td>
+            <td>£78.00</td>
+        </tr>
+
+        <!-- Neutering -->
+        <tr class="section-header">
+            <th scope="row" colspan="2"><strong>Neutering</strong></th>
+        </tr>
+        <tr>
+            <td>Pet Castrate</td>
+            <td>From £150</td>
+        </tr>
+        <tr>
+            <td>Bitch Spay</td>
+            <td>From £200</td>
+        </tr>
+        <tr>
+            <td>Ferret or Guinea Pig Castrate</td>
+            <td>£70.00</td>
+        </tr>
+        <tr>
+            <td>Ferret or Guinea Pig Spay</td>
+            <td>£110.00</td>
+        </tr>
+
+        <!-- Other -->
+        <tr class="section-header">
+            <th scope="row" colspan="2"><strong>Other</strong></th>
+        </tr>
+        <tr>
+            <td>Microchipping</td>
+            <td>£22.80</td>
+        </tr>
+        <tr>
+            <td>Nail Clipping</td>
+            <td>£18.00</td>
+        </tr>
+        <tr>
+            <td>Dental Care</td>
+            <td>Contact us for prices</td>
+        </tr>
+        <tr>
+            <td>Annual Health Check</td>
+            <td>£200</td>
+        </tr>
+
+        <!-- Travel Documents -->
+        <tr class="section-header">
+            <th scope="row" colspan="2"><strong>Travel Documents</strong></th>
+        </tr>
+        <tr>
+            <td>Export Health Certificates</td>
+            <td>£310.00</td>
+        </tr>
+        <tr>
+            <td>Fit To Fly Certificates</td>
+            <td>£98.00</td>
+        </tr>
+
+        <!-- Insurance -->
+        <tr class="section-header">
+            <th scope="row" colspan="2"><strong>Insurance</strong></th>
+        </tr>
+        <tr>
+            <td>Administration Fee</td>
+            <td>£10.00</td>
+        </tr>
+        <tr>
+            <td>Direct Claim Admin Fee (subject to approval)</td>
+            <td>£20.00</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

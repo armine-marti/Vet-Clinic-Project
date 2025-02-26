@@ -1,4 +1,4 @@
-package org.example.vetclinic.dto;
+package org.example.vetclinic.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +23,6 @@ public class UserAuthRequest {
     @Size(min = 8, message = "Password must be at least 8 characters long")
     String password;
 
- @NotNull
-  UserType usertype;
+    @NotNull
+    UserType usertype;
 }
