@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/favicon.ico").permitAll()
                         .requestMatchers(SecurityConstants.PERMITTED_PAGES).permitAll()
                         .requestMatchers("/users/**").hasRole("USER")
+                        .requestMatchers("/admins/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandler ->

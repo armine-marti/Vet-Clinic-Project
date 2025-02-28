@@ -8,6 +8,7 @@ import org.example.vetclinic.service.PetService;
 import org.example.vetclinic.service.UserService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public interface AppointmentMapper {
     @Mapping(source = "pet.id", target = "petId")
     @Mapping(source = "doctor.id", target = "doctorId")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.surname", target = "userSurname")
     AppointmentDto toDto(Appointment appointment);
 
     List<AppointmentDto> toDtoList(List<Appointment> appointments);
@@ -37,10 +39,15 @@ public interface AppointmentMapper {
     @Mapping(source = "pet.id", target = "petId")
     @Mapping(source = "doctor.id", target = "doctorId")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.surname", target = "userSurname")
     SaveAppointmentRequest toSaveAppointmentRequest(Appointment appointment);
 
     @Mapping(target = "doctor", source = "doctorId")
     @Mapping(target = "pet", source = "petId")
     @Mapping(target = "user.id", source = "userId")
     Appointment fromDtoToEntity(AppointmentDto appointmentDto);
+
+    @Mapping(target = "doctor.id", source = "doctorId")
+    @Mapping(target = "pet.id", source = "petId")
+    Appointment partialUpdate(SaveAppointmentRequest saveRequest, @MappingTarget Appointment appointment);
 }

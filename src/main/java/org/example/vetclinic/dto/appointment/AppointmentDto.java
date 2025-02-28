@@ -34,6 +34,7 @@ public class AppointmentDto {
     private String doctorSurname;
 
     private UserDto userDto;
-    private int userId;
+    private Integer userId;
+    private String userSurname;
 
 }
