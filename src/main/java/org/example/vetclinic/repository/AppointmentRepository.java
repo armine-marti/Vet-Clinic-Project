@@ -36,4 +36,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     Optional<Appointment> findByTitleAndUserId(String title, int userId);
 
+    Optional<Appointment> findByTitleAndUserSurname(String title, String surname);
+
+    void deleteByTitleAndUserId(String title, int userId);
 }

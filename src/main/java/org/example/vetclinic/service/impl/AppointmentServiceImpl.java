@@ -65,4 +65,26 @@ public class AppointmentServiceImpl implements AppointmentService {
     public boolean existsByStartTimeAndUserId(Date startTime, int userId) {
         return appointmentRepository.existsByStartTimeAndUserId(startTime, userId);
     }
+
+    @Override
+    public List<Appointment> getAllAppointments() {
+        return appointmentRepository.findAll();
+    }
+
+    @Override
+    public Appointment getByTitleAndUserSurname(String title, String userSurname) {
+        return appointmentRepository.findByTitleAndUserSurname(title, userSurname).orElseThrow();
+    }
+
+    @Override
+    @Transactional
+    public void deleteAppointment(String title, int userId) {
+        appointmentRepository.deleteByTitleAndUserId(title, userId);
+    }
+
+    @Override
+    public Appointment save(Appointment appointment) {
+        return appointmentRepository.save(appointment);
+    }
+
 }

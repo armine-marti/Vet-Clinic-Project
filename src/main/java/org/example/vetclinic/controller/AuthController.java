@@ -73,6 +73,7 @@ public class AuthController {
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("userAuthRequest", new UserAuthRequest());
+
         return "login";
     }
 
@@ -94,7 +95,6 @@ public class AuthController {
             session.setAttribute("token", jwt);
             CurrentUser currentUser = (CurrentUser) userDetails;
             session.setAttribute("currentUser", currentUser);
-
             return redirectBasedOnRole(newAuthentication);
         } catch (BadCredentialsException e) {
             return "redirect:/login?error";

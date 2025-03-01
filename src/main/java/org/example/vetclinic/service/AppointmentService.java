@@ -23,4 +23,12 @@ public interface AppointmentService {
     Appointment getByTitleAndUserId(String title, int userId);
 
     List<Appointment> getAllByStatusAndUserIdAndStartTimeIsFuture(Status status, int userId);
+
+    List<Appointment> getAllAppointments();
+
+    Appointment getByTitleAndUserSurname(String title, String userSurname);
+
+    void deleteAppointment(String title, int userId);
+
+    Appointment save(Appointment appointment);
 }

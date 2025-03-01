@@ -1,5 +1,7 @@
 package org.example.vetclinic.dto.appointment;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +30,7 @@ public class SaveAppointmentRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date startTime;
     private Date finishTime;
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private Integer petId;
@@ -37,6 +40,7 @@ public class SaveAppointmentRequest {
     private String doctorSurname;
 
     private Integer userId;
+    private String userSurname;
 
     public void setFinishTime() {
         if (this.startTime != null) {
