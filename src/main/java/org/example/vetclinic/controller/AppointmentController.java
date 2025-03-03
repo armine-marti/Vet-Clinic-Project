@@ -7,10 +7,7 @@ import org.example.vetclinic.dto.appointment.AppointmentDto;
 import org.example.vetclinic.dto.appointment.SaveAppointmentRequest;
 import org.example.vetclinic.dto.doctor.DoctorDto;
 import org.example.vetclinic.dto.pet.PetDtoBooking;
-import org.example.vetclinic.entity.Appointment;
-import org.example.vetclinic.entity.Status;
-import org.example.vetclinic.entity.StatusPet;
-import org.example.vetclinic.entity.User;
+import org.example.vetclinic.entity.*;
 import org.example.vetclinic.mapper.AppointmentMapper;
 import org.example.vetclinic.mapper.PetMapper;
 import org.example.vetclinic.security.CurrentUser;
@@ -96,7 +93,7 @@ public class AppointmentController {
 
         if (bindingResult.hasErrors()) {
             List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT, user.getId());
-            List<DoctorDto> doctors = doctorService.getAll();
+            List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
             modelMap.put("pets", pets);
             modelMap.put("doctors", doctors);
             modelMap.put("currentUser", currentUser);
@@ -110,7 +107,7 @@ public class AppointmentController {
             bindingResult.rejectValue("title", "error.saveAppointmentRequest",
                     "Please choose different title for appointment!");
             List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT, user.getId());
-            List<DoctorDto> doctors = doctorService.getAll();
+            List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
             modelMap.put("pets", pets);
             modelMap.put("doctors", doctors);
             return "appointment/addAppointment";
@@ -147,7 +144,7 @@ public class AppointmentController {
             modelMap.put("saveAppointmentRequest", appointmentMapper.toSaveAppointmentRequest(appointmentOrNull));
             List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT,
                     appointmentOrNull.getUser().getId());
-            List<DoctorDto> doctors = doctorService.getAll();
+            List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
             modelMap.put("pets", pets);
             modelMap.put("doctors", doctors);
             return "appointment/editAppointment";
@@ -168,7 +165,7 @@ public class AppointmentController {
 
         if (bindingResult.hasErrors()) {
             List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT, userId);
-            List<DoctorDto> doctors = doctorService.getAll();
+            List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
             modelMap.put("pets", pets);
             modelMap.put("doctors", doctors);
             modelMap.put("currentUser", currentUser);
@@ -191,7 +188,7 @@ public class AppointmentController {
                     "Please choose a different title for the appointment!");
             List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT,
                     saveAppointmentRequest.getUserId());
-            List<DoctorDto> doctors = doctorService.getAll();
+            List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
             modelMap.put("pets", pets);
             modelMap.put("doctors", doctors);
             return "appointment/editAppointment";
@@ -257,7 +254,7 @@ public class AppointmentController {
 
     @GetMapping("/addAppointmentForAdmin")
     public String addAppointmentForAdmin(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
-        List<DoctorDto> doctors = doctorService.getAll();
+        List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
         List<User> users = userService.getAll();
         modelMap.put("saveAppointmentRequest", new SaveAppointmentRequest());
         modelMap.put("currentUser", currentUser);
@@ -277,7 +274,7 @@ public class AppointmentController {
         if (bindingResult.hasErrors()) {
             List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT,
                     saveAppointmentRequest.getUserId());
-            List<DoctorDto> doctors = doctorService.getAll();
+            List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
             List<User> users = userService.getAll();
             modelMap.put("pets", pets);
             modelMap.put("doctors", doctors);
@@ -295,7 +292,7 @@ public class AppointmentController {
             List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT,
                     saveAppointmentRequest.getUserId());
             List<User> users = userService.getAll();
-            List<DoctorDto> doctors = doctorService.getAll();
+            List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
             modelMap.put("pets", pets);
             modelMap.put("users", users);
             modelMap.put("doctors", doctors);

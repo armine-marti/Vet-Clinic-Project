@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/main-details.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Edit Doctor</title>
+</head>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Healthcare Center</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/doctors/menu">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/doctors/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/doctors/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/doctors/contactUs">Contacts</a>
+                </li>
+            </ul>
+            <form action="/auth/logout" method="post" class="d-flex">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Edit Doctor Information</h2>
+                </div>
+                <div class="card-body">
+                    <form action="/doctors/editDoctor" method="post" th:object="${saveDoctorRequest}">
+
+                        <input type="hidden" name="oldEmail" th:value="${saveDoctorRequest.email}"/>
+
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name:</label>
+                            <input type="text" id="name" class="form-control" th:field="*{name}" required>
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="surname" class="form-label">Surname:</label>
+                            <input type="text" id="surname" class="form-control" th:field="*{surname}" required>
+                            <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" id="email" class="form-control" th:field="*{email}" required>
+                            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="specialization" class="form-label">Specialization:</label>
+                            <select id="specialization" class="form-select" th:field="*{specialization}" required>
+                                <option value="COMPANION_ANIMAL"
+                                        th:selected="${saveDoctorRequest.specialization == 'COMPANION_ANIMAL'}">
+                                    COMPANION ANIMAL
+                                </option>
+                                <option value="EXOTIC_ANIMAL"
+                                        th:selected="${saveDoctorRequest.specialization == 'EXOTIC_ANIMAL'}">EXOTIC
+                                    ANIMAL
+                                </option>
+                                <option value="LARGE_ANIMAL"
+                                        th:selected="${saveDoctorRequest.specialization == 'LARGE_ANIMAL'}">LARGE ANIMAL
+                                </option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('specialization')}" th:errors="*{specialization}"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

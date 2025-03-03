@@ -19,7 +19,7 @@ import java.util.List;
 )
 public interface AppointmentMapper {
 
-    @Mapping(target = "doctor", source = "doctorId")
+    @Mapping(target = "doctor", source = "doctorId", qualifiedByName = "getById")
     @Mapping(target = "pet", source = "petId", qualifiedByName = "getPetById")
     @Mapping(target = "user.id", source = "userId")
     Appointment fromSaveRequestToEntity(SaveAppointmentRequest saveAppointmentRequest);

@@ -21,6 +21,8 @@ public class Doctor {
     private String email;
     @Enumerated(EnumType.STRING)
     private Specialization specialization;
+    @Enumerated(EnumType.STRING)
+    private StatusDoctor statusDoctor;
 
 
 }
