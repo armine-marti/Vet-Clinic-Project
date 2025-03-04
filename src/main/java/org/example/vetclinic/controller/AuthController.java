@@ -81,7 +81,6 @@ public class AuthController {
     public String login(@ModelAttribute UserAuthRequest userAuthRequest, HttpSession session) {
 
         if (userAuthRequest.getEmail() == null || userAuthRequest.getEmail().isEmpty()) {
-            System.out.println("empty email");
             return "redirect:/login?error";
         }
         try {

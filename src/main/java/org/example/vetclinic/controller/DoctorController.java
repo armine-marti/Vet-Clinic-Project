@@ -7,9 +7,7 @@ import org.example.vetclinic.dto.doctor.SaveDoctorRequest;
 import org.example.vetclinic.entity.Doctor;
 import org.example.vetclinic.entity.StatusDoctor;
 import org.example.vetclinic.mapper.DoctorMapper;
-import org.example.vetclinic.security.CurrentUser;
 import org.example.vetclinic.service.DoctorService;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -36,10 +34,8 @@ public class DoctorController {
 
 
     @GetMapping("/addDoctor")
-    public String addDoctor(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
+    public String addDoctor(ModelMap modelMap) {
+
         modelMap.put("saveDoctorRequest", new SaveDoctorRequest());
         return "doctor/addDoctor";
     }
@@ -86,7 +82,7 @@ public class DoctorController {
             @RequestParam("surname") String surname,
             BindingResult bindingResult,
             ModelMap modelMap) {
-        System.out.println("SaveDoctorRequest data first: " + saveDoctorRequest.toString());
+
         if (bindingResult.hasErrors()) {
             modelMap.put("bindingResult", bindingResult);
             return "doctor/editDoctor";
@@ -94,22 +90,15 @@ public class DoctorController {
 
         Doctor doctor = doctorService.getByEmail(oldEmail);
 
-
-        if (doctor == null) {
-            bindingResult.rejectValue("name", "error.saveDoctorRequest",
-                    "Doctor not found");
+        if ((!oldEmail.equals(saveDoctorRequest.getEmail())
+                && doctorService.existsByEmail(saveDoctorRequest.getEmail()))) {
+            bindingResult.rejectValue("email", "error.saveDoctorRequest", "Please choose a different email for the doctor!");
+            if (doctor == null) {
+                bindingResult.rejectValue("name", "error.saveDoctorRequest", "Doctor not found");
+            }
             return "doctor/editDoctor";
         }
 
-
-        if (!oldEmail.equals(saveDoctorRequest.getEmail())) {
-            boolean isDoctorEmailUnique = doctorService.existsByEmail(saveDoctorRequest.getEmail());
-            if (isDoctorEmailUnique) {
-                bindingResult.rejectValue("email", "error.saveDoctorRequest", "Please choose a different email for the doctor!");
-                return "doctor/editDoctor";
-            }
-        }
-        
         doctor.setSurname(surname);
         Doctor updatedDoctor = doctorMapper.partialUpdate(saveDoctorRequest, doctor);
         updatedDoctor.setStatusDoctor(saveDoctorRequest.getStatusDoctor());
