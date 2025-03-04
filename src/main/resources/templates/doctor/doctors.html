@@ -1,11 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/main-details.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Our Doctors</title>
 </head>
 <body>
-doctors
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/users/menu">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/contactUs">Contacts</a>
+                </li>
+            </ul>
+            <form action="/auth/logout" method="post" class="d-flex">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
 
+<h1>Our Doctors</h1>
+<a href="/doctors/addDoctor" class="btn btn-primary">Add New Doctor</a><br><br>
+
+<div th:if="${#lists.isEmpty(doctors)}">
+    <p>No doctors available.</p>
+</div>
+
+<div th:unless="${#lists.isEmpty(doctors)}">
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+        <tr>
+
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Specialization</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doctor : ${doctors}">
+
+            <td th:text="${doctor.name}">Name</td>
+            <td th:text="${doctor.surname}">Surname</td>
+            <td th:text="${doctor.specialization}">Specialization</td>
+            <td th:text="${doctor.email}">Email</td>
+            <td th:text="${doctor.statusDoctor}">Status</td>
+            <td>
+                <a th:href="@{/doctors/editDoctor(surname=${doctor.surname}, email=${doctor.email})}" class="btn btn-warning btn-sm">Edit</a>
+
+                <form th:action="@{/doctors/deleteDoctor(id=${doctor.id})}" method="post" style="display: inline;">
+                    <input type="hidden" name="id" th:value="${doctor.id}">
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this doctor?')">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="footer-image">
+    <img src="/images/paws-pink-footer.png" alt="Footer Image">
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

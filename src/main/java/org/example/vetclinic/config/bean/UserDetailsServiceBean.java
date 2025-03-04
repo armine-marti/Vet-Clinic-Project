@@ -18,10 +18,8 @@ public class UserDetailsServiceBean {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
-            System.out.println("Trying to find user with: " + email);
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> {
-                        System.out.println("User not found!");
                         return new UsernameNotFoundException("Cannot find user with email: " + email);
                     });
             return new CurrentUser(user);
