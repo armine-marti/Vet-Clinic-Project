@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/main-details.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+</head>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Black Country Vets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/users/menu">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/ourServices">Our Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/aboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/navbar/contactUs">Contacts</a>
+                </li>
+            </ul>
+            <form action="/auth/logout" method="post" class="d-flex">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Edit User Information</h2>
+                </div>
+                <div class="card-body">
+                    <form action="/users/editUser" method="post" th:object="${editUserRequest}">
+
+                        <input type="hidden" name="oldEmail" th:value="${editUserRequest.email}"/>
+                        <input type="hidden" name="id" th:value="${editUserRequest.id}"/>
+
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name:</label>
+                            <input type="text" id="name" class="form-control" th:field="*{name}" required>
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="surname" class="form-label">Surname:</label>
+                            <input type="text" id="surname" class="form-control" th:field="*{surname}" required>
+                            <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone:</label>
+                            <input type="text" id="phone" class="form-control" th:field="*{phone}" required>
+                            <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" id="email" class="form-control" th:field="*{email}" required>
+                            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="userType" class="form-label">User Type:</label>
+                            <select id="userType" class="form-select" th:field="*{userType}" required>
+                                <option value="ADMIN" th:selected="${editUserRequest.userType == 'ADMIN'}">ADMIN
+                                </option>
+                                <option value="USER" th:selected="${editUserRequest.userType == 'USER'}">USER</option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('userType')}" th:errors="*{userType}"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="statusUser" class="form-label">User Status:</label>
+                            <select id="statusUser" class="form-select" th:field="*{statusUser}" required>
+                                <option value="ACTIVE" th:selected="${editUserRequest.statusUser == 'ACTIVE'}">ACTIVE
+                                </option>
+                                <option value="DELETED" th:selected="${editUserRequest.statusUser == 'DELETED'}">
+                                    DELETED
+                                </option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('statusUser')}" th:errors="*{statusUser}"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

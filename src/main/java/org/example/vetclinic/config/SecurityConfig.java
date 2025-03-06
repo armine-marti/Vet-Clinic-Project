@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/favicon.ico").permitAll()
                         .requestMatchers(SecurityConstants.PERMITTED_PAGES).permitAll()
-                        .requestMatchers("/users/**").hasRole("USER")
+                        .requestMatchers("/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admins/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

@@ -1,0 +1,13 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="010_add_status_column_to_user" author="armine">
+        <addColumn tableName="user">
+            <column name="status_user" type="enum('DELETED', 'ACTIVE')"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
