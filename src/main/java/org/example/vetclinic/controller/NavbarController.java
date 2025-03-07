@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class NavbarController {
 
     @GetMapping("/aboutUs")
-    public String aboutUs() {
+    public String aboutUs(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+        model.addAttribute("userType", currentUser.getUserType());
         return "navbar/aboutUs";
     }
 
@@ -23,12 +24,14 @@ public class NavbarController {
     }
 
     @GetMapping("/ourDoctors")
-    public String ourDoctors() {
+    public String ourDoctors(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+        model.addAttribute("userType", currentUser.getUserType());
         return "navbar/ourDoctors";
     }
 
     @GetMapping("/ourServices")
-    public String ourServices() {
+    public String ourServices(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+        model.addAttribute("userType", currentUser.getUserType());
         return "navbar/ourServices";
     }
 

@@ -30,6 +30,10 @@
                     <a class="nav-link" href="/navbar/contactUs">Contacts</a>
                 </li>
             </ul>
+            <form th:action="@{/users/editAccount}" method="get" class="d-flex">
+                <input type="hidden" name="email" th:value="${currentUser.email}" />
+                <button type="submit" class="btn btn-info">Edit Account Details</button>
+            </form>
             <form action="/auth/logout" method="post" class="d-flex">
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
             </form>

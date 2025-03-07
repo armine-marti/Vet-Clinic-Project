@@ -21,5 +21,6 @@ public interface UserMapper {
     EditUserRequest toEditUserRequest(User user);
 
     User partialUpdate(EditUserRequest editUserRequest, @MappingTarget User user);
+    User partialUpdate(SaveUserRequest saveUserRequest, @MappingTarget User user);
 
 }
