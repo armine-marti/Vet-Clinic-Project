@@ -92,9 +92,11 @@ public class DoctorController {
 
         if ((!oldEmail.equals(saveDoctorRequest.getEmail())
                 && doctorService.existsByEmail(saveDoctorRequest.getEmail()))) {
-            bindingResult.rejectValue("email", "error.saveDoctorRequest", "Please choose a different email for the doctor!");
+            bindingResult.rejectValue("email", "error.saveDoctorRequest",
+                    "Please choose a different email for the doctor!");
             if (doctor == null) {
-                bindingResult.rejectValue("name", "error.saveDoctorRequest", "Doctor not found");
+                bindingResult.rejectValue("name", "error.saveDoctorRequest",
+                        "Doctor not found");
             }
             return "doctor/editDoctor";
         }

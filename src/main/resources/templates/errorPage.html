@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link href="/css/main-details.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Edit User</title>
+</head>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Black Country Vets</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/users/menu">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/navbar/ourServices">Our Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/navbar/aboutUs">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/navbar/contactUs">Contacts</a>
+        </li>
+      </ul>
+      <form action="/auth/logout" method="post" class="d-flex">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log out</button>
+      </form>
+    </div>
+  </div>
+</nav>
+<body>
+
+
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card text-white bg-danger mb-3" style="max-width: 20rem;">
+    <div class="card-header text-center">Error</div>
+    <div class="card-body text-center">
+      <h4 class="card-title">An unexpected error occurred.</h4>
+      <p th:text="${message}">An unexpected error occurred.</p>
+      <a href="/" class="btn btn-light mt-3">Go Home</a>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

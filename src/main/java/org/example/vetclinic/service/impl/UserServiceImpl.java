@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.vetclinic.entity.StatusUser;
 import org.example.vetclinic.entity.User;
+import org.example.vetclinic.exception.UserNotFoundException;
 import org.example.vetclinic.repository.UserRepository;
 import org.example.vetclinic.service.UserService;
 import org.springframework.stereotype.Service;
@@ -44,17 +45,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
+
     }
 
+
+    @Override
     public User getById(int id) {
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
     }
 
     @Override
     @Transactional
     public void deleteUser(int userId) {
         User user = getById(userId);
+
         userRepository.softUserDelete(user.getId());
     }
 

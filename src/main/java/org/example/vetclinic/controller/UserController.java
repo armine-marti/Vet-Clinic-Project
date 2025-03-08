@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.vetclinic.dto.user.EditUserRequest;
+import org.example.vetclinic.dto.user.SaveUserRequest;
 import org.example.vetclinic.dto.user.UserDto;
 import org.example.vetclinic.entity.StatusUser;
 import org.example.vetclinic.entity.User;
@@ -11,6 +12,7 @@ import org.example.vetclinic.mapper.UserMapper;
 import org.example.vetclinic.security.CurrentUser;
 import org.example.vetclinic.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,6 +29,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/menu")
     public String menu(HttpSession session, Model model, @AuthenticationPrincipal CurrentUser currentUser) {
@@ -75,7 +78,8 @@ public class UserController {
 
         if ((!oldEmail.equals(editUserRequest.getEmail())
                 && userService.existsByEmail(editUserRequest.getEmail()))) {
-            bindingResult.rejectValue("email", "error.editUserRequest", "Please choose a different email for the user!");
+            bindingResult.rejectValue("email", "error.editUserRequest",
+                    "Please choose a different email for the user!");
             if (user == null) {
                 bindingResult.rejectValue("name", "error.editUserRequest", "User not found");
             }
@@ -96,6 +100,54 @@ public class UserController {
         userService.deleteUser(userId);
         redirectAttributes.addFlashAttribute("success", "User has been deleted!");
         return "redirect:/users/allUsers";
+    }
+
+    @GetMapping("/errorPage")
+    public String showErrorPage(@RequestParam(value = "message", required = false,
+            defaultValue = "An unexpected error occurred. User cannot be found") String message, Model model) {
+        model.addAttribute("message", message);
+        return "errorPage";
+    }
+
+    @GetMapping("/editAccount")
+    public String editAccount(@RequestParam("email") String email,  ModelMap modelMap) {
+        User userOrNull = userService.getByEmail(email);
+        if (userOrNull != null) {
+            modelMap.put("saveUserRequest", userMapper.toSaveUserRequest(userOrNull));
+            return "users/editAccount";
+        }
+        return "users/menu";
+    }
+
+    @PostMapping("/editAccount")
+    public String editAccount(
+            @ModelAttribute SaveUserRequest saveUserRequest,
+            @RequestParam("oldEmail") String oldEmail,
+            @Valid BindingResult bindingResult,
+            ModelMap modelMap) {
+
+        if (bindingResult.hasErrors()) {
+            modelMap.put("bindingResult", bindingResult);
+            return "users/editAccount";
+        }
+
+        User user = userService.getByEmail(oldEmail);
+        saveUserRequest.setUserType(user.getUserType());
+        user.setEmail(saveUserRequest.getEmail());
+        String encodedPassword = passwordEncoder.encode(saveUserRequest.getPassword());
+        saveUserRequest.setPassword(encodedPassword);
+        if ((!oldEmail.equals(saveUserRequest.getEmail())
+                && userService.existsByEmail(saveUserRequest.getEmail()))) {
+            bindingResult.rejectValue("email", "error.saveUserRequest",
+                    "Please choose a different email!");
+            return "users/editAccount";
+        }
+
+        User updatedUser = userMapper.partialUpdate(saveUserRequest, user);
+        userService.save(updatedUser);
+
+        return "redirect:/auth/login";
+
     }
 
 }

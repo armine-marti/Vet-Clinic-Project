@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.vetclinic.entity.StatusUser;
 import org.example.vetclinic.entity.UserType;
 
 @Builder
@@ -27,7 +26,6 @@ public class SaveUserRequest {
     @NotEmpty(message = "Password can't be empty")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
-    @NotNull(message = "User type must be chosen")
     private UserType userType;
 
 
