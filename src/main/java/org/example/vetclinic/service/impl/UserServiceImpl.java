@@ -45,13 +45,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByEmail(String email) {
-        try {
-            return userRepository.findByEmail(email)
-                    .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
-        } catch (Exception e) {
-            throw new UserNotFoundException("Error while fetching user by email: " + email, e);
-        }
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
+
     }
+
 
     @Override
     public User getById(int id) {
@@ -63,9 +61,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUser(int userId) {
         User user = getById(userId);
-        if (user == null) {
-            throw new UserNotFoundException("User with this ID is not found");
-        }
+
         userRepository.softUserDelete(user.getId());
     }
 
