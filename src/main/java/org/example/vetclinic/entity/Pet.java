@@ -6,6 +6,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+/**
+ * Entity representing a pet.
+ * This class maps to the `pet` table in the database and stores details about a pet,
+ * including its name, type, size, birthday, weight, gender, owner, and status.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

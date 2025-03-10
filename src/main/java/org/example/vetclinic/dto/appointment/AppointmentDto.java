@@ -13,6 +13,11 @@ import org.example.vetclinic.entity.Status;
 
 import java.util.Date;
 
+/**
+ * Data Transfer Object (DTO) representing an appointment.
+ * This class is used to transfer appointment-related data between different layers of the application.
+ * It includes information about the appointment, the pet, the doctor, and the user associated with the appointment.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

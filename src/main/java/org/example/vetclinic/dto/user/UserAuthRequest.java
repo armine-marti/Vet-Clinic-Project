@@ -7,6 +7,10 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.example.vetclinic.entity.UserType;
 
+/**
+ * DTO representing the data required for user authentication.
+ * This class captures the user's email, password, and user type for the authentication process.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

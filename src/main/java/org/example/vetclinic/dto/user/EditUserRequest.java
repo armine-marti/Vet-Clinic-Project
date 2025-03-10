@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 import org.example.vetclinic.entity.StatusUser;
 import org.example.vetclinic.entity.UserType;
 
+/**
+ * DTO representing the data required to edit an existing user's information.
+ * This class captures the necessary details such as name, surname, phone number, email, user type, and status.
+ */
 @Builder
 @Data
 @AllArgsConstructor

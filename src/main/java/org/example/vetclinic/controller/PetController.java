@@ -20,6 +20,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The {@code PetController} class handles all requests related to pets, such as viewing,
+ * adding, editing, and deleting pets. This controller provides endpoints to manage pets
+ * for the currently authenticated user.
+ * <p>
+ * It relies on {@link PetService} for business logic and {@link PetMapper} to map between
+ * DTOs and entities. The {@code @AuthenticationPrincipal} annotation is used to access the
+ * currently authenticated user's details.
+ * </p>
+ */
 @Controller
 @RequestMapping("/pets")
 @RequiredArgsConstructor
@@ -28,6 +38,14 @@ public class PetController {
     private final PetService petService;
     private final PetMapper petMapper;
 
+
+    /**
+     * Displays the list of pets for the currently authenticated user.
+     *
+     * @param modelMap    the model to pass data to the view.
+     * @param currentUser the currently authenticated user.
+     * @return the view name for the pets list page.
+     */
     @GetMapping
     public String userPets(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
         User user = currentUser.getUser();
@@ -37,6 +55,13 @@ public class PetController {
         return "pet/pets";
     }
 
+    /**
+     * Displays the form to add a new pet.
+     *
+     * @param modelMap    the model to pass data to the view.
+     * @param currentUser the currently authenticated user.
+     * @return the view name for the add pet page.
+     */
     @GetMapping("/addPet")
     public String addPet(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
         if (currentUser == null) {
@@ -47,6 +72,16 @@ public class PetController {
         return "pet/addPet";
     }
 
+    /**
+     * Handles the form submission to add a new pet.
+     *
+     * @param savePetRequest     the request body containing the new pet's details.
+     * @param bindingResult      contains any validation errors during form submission.
+     * @param redirectAttributes used to pass flash attributes after redirection.
+     * @param modelMap           the model to pass data to the view.
+     * @param currentUser        the currently authenticated user.
+     * @return the redirect URL or the view name in case of validation errors.
+     */
     @PostMapping("/addPet")
     public String addPet(@Valid @ModelAttribute SavePetRequest savePetRequest,
                          BindingResult bindingResult,
@@ -73,6 +108,13 @@ public class PetController {
         return "redirect:/pets";
     }
 
+    /**
+     * Displays the form to edit an existing pet's details.
+     *
+     * @param name     the name of the pet to be edited.
+     * @param modelMap the model to pass data to the view.
+     * @return the view name for the edit pet page or redirect to pets page if pet is not found.
+     */
     @GetMapping("/editPet")
     public String editPet(@RequestParam("name") String name, ModelMap modelMap) {
         Pet petOrNull = petService.getByNameOrNull(name);
@@ -83,6 +125,16 @@ public class PetController {
         return "redirect:/pets";
     }
 
+    /**
+     * Handles the form submission to edit an existing pet's details.
+     *
+     * @param oldName            the original name of the pet to be edited.
+     * @param savePetRequest     the updated pet details.
+     * @param bindingResult      contains any validation errors during form submission.
+     * @param redirectAttributes used to pass flash attributes after redirection.
+     * @param currentUser        the currently authenticated user.
+     * @return the redirect URL or the view name in case of validation errors.
+     */
     @PostMapping("/editPet")
     public String editPet(
             @RequestParam("oldName") String oldName,
@@ -117,6 +169,14 @@ public class PetController {
         return "redirect:/pets";
     }
 
+    /**
+     * Handles the deletion of a pet.
+     *
+     * @param name               the name of the pet to be deleted.
+     * @param redirectAttributes used to pass flash attributes after redirection.
+     * @param currentUser        the currently authenticated user.
+     * @return the redirect URL for the pets list page.
+     */
     @PostMapping("/deletePet")
     public String deletePet(@RequestParam("name") String name, RedirectAttributes redirectAttributes,
                             @AuthenticationPrincipal CurrentUser currentUser) {

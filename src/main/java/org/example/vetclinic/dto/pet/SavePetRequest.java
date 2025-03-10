@@ -12,6 +12,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+/**
+ * DTO representing the data required to save or create a pet.
+ * This class captures the necessary pet details such as name, type, size, birthday, weight, and gender for saving a pet.
+ */
 @Builder
 @Data
 @AllArgsConstructor
