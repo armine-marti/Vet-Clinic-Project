@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity representing a doctor.
+ * This class maps to the `doctor` table in the database and stores details about a doctor,
+ * including their name, surname, email, specialization, and status.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

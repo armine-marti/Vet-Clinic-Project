@@ -16,6 +16,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * DTO representing the data required to create or save an appointment.
+ * This class is used to capture appointment details such as title, start time, finish time, status,
+ * associated pet, doctor, and user information.
+ */
 @Builder
 @Data
 @AllArgsConstructor

@@ -14,6 +14,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+/**
+ * Data Transfer Object (DTO) representing a pet specifically for booking purposes.
+ * This class is used to transfer essential pet-related data, including the pet's details such as name, type, size,
+ * birthday, weight, gender, and status.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

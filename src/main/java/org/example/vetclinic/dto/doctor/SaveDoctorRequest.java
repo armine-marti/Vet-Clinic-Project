@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 import org.example.vetclinic.entity.Specialization;
 import org.example.vetclinic.entity.StatusDoctor;
 
+/**
+ * DTO representing the data required to save or create a doctor.
+ * This class is used to capture the doctor's name, surname, email, specialization, and status.
+ */
 @Builder
 @Data
 @AllArgsConstructor

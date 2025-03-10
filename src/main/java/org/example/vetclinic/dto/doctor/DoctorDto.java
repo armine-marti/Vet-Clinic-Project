@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 import org.example.vetclinic.entity.Specialization;
 import org.example.vetclinic.entity.StatusDoctor;
 
+/**
+ * Data Transfer Object (DTO) representing a doctor.
+ * This class is used to transfer doctor-related data between different layers of the application.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

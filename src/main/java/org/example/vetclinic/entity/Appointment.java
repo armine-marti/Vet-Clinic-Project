@@ -8,6 +8,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * Entity representing an appointment.
+ * This class maps to the `appointment` table in the database and stores the details of an appointment,
+ * including its title, start and finish times, associated pet, doctor, user, and status.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity class representing a user in the system.
+ * This class contains user information such as name, email, password, and status.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

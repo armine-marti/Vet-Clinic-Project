@@ -22,6 +22,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+/**
+ * The {@code UserController} class handles requests related to user management, including viewing,
+ * editing, deleting users, and updating account details. It provides endpoints to manage user data
+ * and user account settings, as well as handling login and error page views.
+ * <p>
+ * The controller relies on {@link UserService} for business logic, {@link UserMapper} for mapping
+ * between entities and DTOs, and {@link PasswordEncoder} for encoding passwords during account updates.
+ * </p>
+ */
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -31,6 +40,15 @@ public class UserController {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Displays the menu page for the currently authenticated user. If a session token is available,
+     * it is added to the model.
+     *
+     * @param session     the HTTP session.
+     * @param model       the model to pass data to the view.
+     * @param currentUser the currently authenticated user.
+     * @return the view name for the users menu page.
+     */
     @GetMapping("/menu")
     public String menu(HttpSession session, Model model, @AuthenticationPrincipal CurrentUser currentUser) {
         String token = (String) session.getAttribute("token");
@@ -43,6 +61,12 @@ public class UserController {
         return "/users/menu";
     }
 
+    /**
+     * Displays all active users in the system.
+     *
+     * @param modelMap the model to pass data to the view.
+     * @return the view name for the all users page.
+     */
     @GetMapping("/allUsers")
     public String allUsers(ModelMap modelMap) {
         List<UserDto> users = userMapper.toDtoList(userService.getAllByStatusUser(StatusUser.ACTIVE));
@@ -51,6 +75,13 @@ public class UserController {
 
     }
 
+    /**
+     * Displays the form to edit a user's information.
+     *
+     * @param email    the email of the user to be edited.
+     * @param modelMap the model to pass data to the view.
+     * @return the view name for the edit user page or the all users page if user is not found.
+     */
     @GetMapping("/editUser")
     public String editUser(@RequestParam("email") String email,
                            ModelMap modelMap) {
@@ -62,6 +93,15 @@ public class UserController {
         return "users/allUsers";
     }
 
+    /**
+     * Handles the form submission to edit a user's information.
+     *
+     * @param editUserRequest the updated user details.
+     * @param oldEmail        the original email of the user being edited.
+     * @param bindingResult   contains validation errors during form submission.
+     * @param modelMap        the model to pass data to the view.
+     * @return the redirect URL or the edit user page in case of validation errors.
+     */
     @PostMapping("/editUser")
     public String editUser(
             @Valid @ModelAttribute EditUserRequest editUserRequest,
@@ -95,6 +135,13 @@ public class UserController {
 
     }
 
+    /**
+     * Handles the deletion of a user.
+     *
+     * @param userId             the ID of the user to be deleted.
+     * @param redirectAttributes used to pass flash attributes after redirection.
+     * @return the redirect URL for the all users page.
+     */
     @PostMapping("/deleteUser")
     public String deleteUser(@RequestParam("id") int userId, RedirectAttributes redirectAttributes) {
         userService.deleteUser(userId);
@@ -102,6 +149,13 @@ public class UserController {
         return "redirect:/users/allUsers";
     }
 
+    /**
+     * Displays an error page with a custom message.
+     *
+     * @param message the error message to display.
+     * @param model   the model to pass data to the view.
+     * @return the view name for the error page.
+     */
     @GetMapping("/errorPage")
     public String showErrorPage(@RequestParam(value = "message", required = false,
             defaultValue = "An unexpected error occurred. User cannot be found") String message, Model model) {
@@ -109,8 +163,15 @@ public class UserController {
         return "errorPage";
     }
 
+    /**
+     * Displays the form to edit a user's account details.
+     *
+     * @param email    the email of the user to be edited.
+     * @param modelMap the model to pass data to the view.
+     * @return the view name for the edit account page or the menu page if user is not found.
+     */
     @GetMapping("/editAccount")
-    public String editAccount(@RequestParam("email") String email,  ModelMap modelMap) {
+    public String editAccount(@RequestParam("email") String email, ModelMap modelMap) {
         User userOrNull = userService.getByEmail(email);
         if (userOrNull != null) {
             modelMap.put("saveUserRequest", userMapper.toSaveUserRequest(userOrNull));
@@ -119,6 +180,15 @@ public class UserController {
         return "users/menu";
     }
 
+    /**
+     * Handles the form submission to edit a user's account details.
+     *
+     * @param saveUserRequest the updated account details.
+     * @param oldEmail        the original email of the user being edited.
+     * @param bindingResult   contains validation errors during form submission.
+     * @param modelMap        the model to pass data to the view.
+     * @return the redirect URL or the edit account page in case of validation errors.
+     */
     @PostMapping("/editAccount")
     public String editAccount(
             @ModelAttribute SaveUserRequest saveUserRequest,

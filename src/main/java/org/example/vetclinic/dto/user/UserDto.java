@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 import org.example.vetclinic.entity.StatusUser;
 import org.example.vetclinic.entity.UserType;
 
+/**
+ * Data Transfer Object (DTO) for representing a user.
+ * This class holds the essential information of a user such as their ID, name, surname, phone number, email, user type, and user status.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

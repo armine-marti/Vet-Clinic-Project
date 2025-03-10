@@ -16,6 +16,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+/**
+ * Controller responsible for handling actions related to doctors including viewing,
+ * adding, editing, and deleting doctor records.
+ */
 @Controller
 @RequestMapping("/doctors")
 @RequiredArgsConstructor
@@ -24,7 +28,12 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final DoctorMapper doctorMapper;
 
-
+    /**
+     * Displays all doctors who are currently active employees.
+     *
+     * @param modelMap the model used to pass the list of doctors to the view.
+     * @return the view name for displaying the list of doctors.
+     */
     @GetMapping
     public String allDoctors(ModelMap modelMap) {
         List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
@@ -32,7 +41,12 @@ public class DoctorController {
         return "doctor/doctors";
     }
 
-
+    /**
+     * Displays the form for adding a new doctor.
+     *
+     * @param modelMap the model used to add an empty SaveDoctorRequest object to the view.
+     * @return the view name for the add doctor form.
+     */
     @GetMapping("/addDoctor")
     public String addDoctor(ModelMap modelMap) {
 
@@ -40,6 +54,16 @@ public class DoctorController {
         return "doctor/addDoctor";
     }
 
+    /**
+     * Handles the form submission for adding a new doctor. If there are validation errors or if
+     * a doctor with the same email already exists, the user is redirected back to the add doctor form.
+     *
+     * @param saveDoctorRequest  the details for the new doctor to be added.
+     * @param bindingResult      contains validation errors, if any.
+     * @param redirectAttributes used to add flash attributes (success or error messages).
+     * @param modelMap           used to pass the validation result back to the view.
+     * @return the view name for redirection after successful addition or to show errors.
+     */
     @PostMapping("/addDoctor")
     public String addDoctor(@Valid @ModelAttribute SaveDoctorRequest saveDoctorRequest,
                             BindingResult bindingResult,
@@ -63,7 +87,14 @@ public class DoctorController {
         return "redirect:/doctors";
     }
 
-
+    /**
+     * Displays the form for editing an existing doctor.
+     *
+     * @param email    the email of the doctor to be edited.
+     * @param surname  the surname of the doctor to be edited.
+     * @param modelMap the model used to pass the existing doctor's details to the view.
+     * @return the view name for editing the doctor, or the list of doctors if the doctor is not found.
+     */
     @GetMapping("/editDoctor")
     public String editDoctor(@RequestParam("email") String email, @RequestParam("surname") String surname,
                              ModelMap modelMap) {
@@ -75,6 +106,17 @@ public class DoctorController {
         return "doctor/doctors";
     }
 
+    /**
+     * Handles the form submission for editing a doctor. If there are validation errors or if the
+     * doctor with the same email already exists, the user is redirected back to the edit doctor form.
+     *
+     * @param saveDoctorRequest the details for the doctor to be edited.
+     * @param oldEmail          the current email of the doctor to be edited.
+     * @param surname           the current surname of the doctor to be edited.
+     * @param bindingResult     contains validation errors, if any.
+     * @param modelMap          used to pass the validation result back to the view.
+     * @return the view name for redirection after successful update or to show errors.
+     */
     @PostMapping("/editDoctor")
     public String editDoctor(
             @Valid @ModelAttribute SaveDoctorRequest saveDoctorRequest,
@@ -110,6 +152,13 @@ public class DoctorController {
 
     }
 
+    /**
+     * Handles the deletion of a doctor based on their ID.
+     *
+     * @param doctorId           the ID of the doctor to be deleted.
+     * @param redirectAttributes used to add flash attributes (success or error messages).
+     * @return the view name for redirection after successful deletion.
+     */
     @PostMapping("/deleteDoctor")
     public String deleteDoctor(@RequestParam("id") int doctorId, RedirectAttributes redirectAttributes) {
         doctorService.deleteDoctor(doctorId);

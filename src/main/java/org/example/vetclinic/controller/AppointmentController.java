@@ -9,7 +9,6 @@ import org.example.vetclinic.dto.doctor.DoctorDto;
 import org.example.vetclinic.dto.pet.PetDtoBooking;
 import org.example.vetclinic.entity.*;
 import org.example.vetclinic.mapper.AppointmentMapper;
-import org.example.vetclinic.mapper.PetMapper;
 import org.example.vetclinic.security.CurrentUser;
 import org.example.vetclinic.service.AppointmentService;
 import org.example.vetclinic.service.DoctorService;
@@ -28,6 +27,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Controller responsible for handling all appointment-related functionality.
+ * This includes viewing, creating, editing, canceling, and deleting appointments,
+ * both for users and admins.
+ */
 @Controller
 @RequestMapping("/appointments")
 @RequiredArgsConstructor
@@ -39,9 +43,15 @@ public class AppointmentController {
     private final PetService petService;
     private final DoctorService doctorService;
     private final AppointmentMapper appointmentMapper;
-    private final PetMapper petMapper;
     private final UserService userService;
 
+    /**
+     * Displays the appointments for the authenticated user.
+     *
+     * @param modelMap    the model to add attributes to the view.
+     * @param currentUser the current authenticated user.
+     * @return the view name to display user appointments.
+     */
     @GetMapping
     public String userAppointments(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
         User user = currentUser.getUser();
@@ -56,6 +66,13 @@ public class AppointmentController {
         return "appointment/appointments";
     }
 
+    /**
+     * Displays all appointments (admin view).
+     *
+     * @param modelMap    the model to add attributes to the view.
+     * @param currentUser the current authenticated user.
+     * @return the view name to display all appointments.
+     */
     @GetMapping("/allAppointments")
     public String allAppointments(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
 
@@ -69,6 +86,13 @@ public class AppointmentController {
         return "appointment/allAppointments";
     }
 
+    /**
+     * Displays the form to add a new appointment for the authenticated user.
+     *
+     * @param modelMap    the model to add attributes to the view.
+     * @param currentUser the current authenticated user.
+     * @return the view name to add an appointment.
+     */
     @GetMapping("/addAppointment")
     public String addAppointment(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
         List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT,
@@ -82,6 +106,16 @@ public class AppointmentController {
         return "appointment/addAppointment";
     }
 
+    /**
+     * Handles the form submission for adding a new appointment.
+     *
+     * @param saveAppointmentRequest the appointment details to be saved.
+     * @param bindingResult          contains any validation errors.
+     * @param redirectAttributes     used to add redirect attributes.
+     * @param modelMap               the model to add attributes to the view.
+     * @param currentUser            the current authenticated user.
+     * @return the view to display based on the result (either the appointment form or success).
+     */
     @PostMapping("/addAppointment")
     public String addAppointment(
             @Valid @ModelAttribute SaveAppointmentRequest saveAppointmentRequest,
@@ -136,6 +170,14 @@ public class AppointmentController {
 
     }
 
+    /**
+     * Displays the form to edit an existing appointment.
+     *
+     * @param title       the title of the appointment to be edited.
+     * @param userSurname the surname of the user for the appointment.
+     * @param modelMap    the model to add attributes to the view.
+     * @return the view name to edit the appointment or the view for all appointments if not found.
+     */
     @GetMapping("/editAppointment")
     public String editAppointment(@RequestParam("title") String title, @RequestParam("userSurname") String userSurname,
                                   ModelMap modelMap) {
@@ -152,6 +194,19 @@ public class AppointmentController {
         return "appointment/allAppointments";
     }
 
+    /**
+     * Handles the form submission for editing an existing appointment.
+     *
+     * @param saveAppointmentRequest the updated appointment details.
+     * @param userId                 the user ID associated with the appointment.
+     * @param oldTitle               the previous title of the appointment.
+     * @param oldStartTime           the previous start time of the appointment.
+     * @param bindingResult          contains any validation errors.
+     * @param redirectAttributes     used to add redirect attributes.
+     * @param modelMap               the model to add attributes to the view.
+     * @param currentUser            the current authenticated user.
+     * @return the view to display based on the result (either the appointment form or success).
+     */
     @PostMapping("/editAppointment")
     public String editAppointment(
             @Valid @ModelAttribute SaveAppointmentRequest saveAppointmentRequest,
@@ -223,7 +278,14 @@ public class AppointmentController {
         return "redirect:/appointments/allAppointments";
     }
 
-
+    /**
+     * Cancels an appointment based on the title.
+     *
+     * @param title              the title of the appointment to be canceled.
+     * @param redirectAttributes used to add flash attributes.
+     * @param currentUser        the current authenticated user.
+     * @return the redirection URL after cancellation.
+     */
     @PostMapping("/cancelAppointment")
     public String cancelAppointment(
             @RequestParam("title") String title,
@@ -237,6 +299,14 @@ public class AppointmentController {
 
     }
 
+    /**
+     * Deletes an appointment based on the title and user ID.
+     *
+     * @param title              the title of the appointment to be deleted.
+     * @param userId             the user ID associated with the appointment.
+     * @param redirectAttributes used to add flash attributes.
+     * @return the redirection URL after deletion.
+     */
     @PostMapping("/deleteAppointment")
     public String deleteAppointment(
             @RequestParam("title") String title,
@@ -251,7 +321,13 @@ public class AppointmentController {
 
     }
 
-
+    /**
+     * Displays the form to add an appointment for an admin.
+     *
+     * @param modelMap    the model to add attributes to the view.
+     * @param currentUser the current authenticated user.
+     * @return the view name to add an appointment for admin.
+     */
     @GetMapping("/addAppointmentForAdmin")
     public String addAppointmentForAdmin(ModelMap modelMap, @AuthenticationPrincipal CurrentUser currentUser) {
         List<DoctorDto> doctors = doctorService.getAllByStatusDoctor(StatusDoctor.CURRENT_EMPLOYEE);
@@ -264,6 +340,16 @@ public class AppointmentController {
         return "appointment/addAppointmentForAdmin";
     }
 
+    /**
+     * Handles the form submission for adding an appointment for an admin.
+     *
+     * @param saveAppointmentRequest the appointment details to be saved.
+     * @param bindingResult          contains any validation errors.
+     * @param redirectAttributes     used to add redirect attributes.
+     * @param modelMap               the model to add attributes to the view.
+     * @param currentUser            the current authenticated user.
+     * @return the view to display based on the result (either the appointment form or success).
+     */
     @PostMapping("/addAppointmentForAdmin")
     public String addAppointmentForAdmin(
             @Valid @ModelAttribute SaveAppointmentRequest saveAppointmentRequest,
@@ -322,6 +408,13 @@ public class AppointmentController {
 
     }
 
+    /**
+     * Retrieves the pets for a user by user ID.
+     *
+     * @param userId the user ID.
+     * @param model  the model to add attributes to the view.
+     * @return the view fragment for the pet list.
+     */
     @GetMapping("/getPetsForUser/{userId}")
     public String getPetsForUser(@PathVariable int userId, Model model) {
         List<PetDtoBooking> pets = petService.getAllByStatusPetAndUserIdForBooking(StatusPet.PRESENT, userId);
